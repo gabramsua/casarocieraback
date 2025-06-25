@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+//import io.swagger.v3.oas.annotations.Operation;
 
 import com.boot.model.Year;
 import com.boot.repository.YearRepository;
@@ -23,15 +24,20 @@ public class YearController {
 
 	@Autowired
 	YearRepository repository;
-	
+
+//    @Operation(summary = "Devuelve el detalle de un año")
 	@GetMapping(value="year/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
-	public Year getItem(@PathVariable("id") int id) {
-		return repository.findById(id).orElse(null);
+	public ResponseEntity<?> getItem(@PathVariable("id") int id) {
+		return ResponseEntity.ok(repository.findById(id).orElse(null));
 	}
+	
+//  @Operation(summary = "Devuelve el listado de años")
 	@GetMapping(value="/years", produces=MediaType.APPLICATION_JSON_VALUE)
-	public List<Year>getAll() {
-		return repository.findAll();
+	public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok(repository.findAll());
 	}
+	
+//  @Operation(summary = "Añade un año")
 	@PostMapping(value="year", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<?> add(@RequestBody Year item) {
 		Year created_item    = new Year(item.getNombre(), item.getYear());
@@ -56,13 +62,43 @@ public class YearController {
         //	Recuperamos registro creado
         return ResponseEntity.ok(repository.findByNombre(item.getNombre()));
 	}
-	
+
+//  @Operation(summary = "Actualiza todos los valores de un año")
 	@PutMapping(value="year", consumes=MediaType.APPLICATION_JSON_VALUE)
-	public void update(@RequestBody Year item) {
-		repository.save(item);
+	public ResponseEntity<?> update(@RequestBody Year item) {
+		Year updated_item    = new Year(item.getNombre(), item.getYear());
+		
+		try {
+            // Buscar el registro por su ID en la base de datos
+			updated_item = repository.findById(item.getId()).get();
+            if (!ObjectUtils.isEmpty(updated_item)){
+            	repository.save(item);
+            	return ResponseEntity.ok(repository.findByNombre(item.getNombre()));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+		} catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
 	}
+	
+//  @Operation(summary = "Borrado físico de un año")
 	@DeleteMapping(value="year/{id}")
-	public void delete(@PathVariable("id")int id) {
+	public ResponseEntity<?> delete(@PathVariable("id")int id) {
 		repository.delete(repository.findById(id).orElse(null));
+
+		Year deleted_item = new Year();
+
+
+        // Buscamos la relación
+		deleted_item = repository.findById(id).get();
+        if (!ObjectUtils.isEmpty(deleted_item)){
+
+            repository.deleteById(deleted_item.getId());
+            
+            return ResponseEntity.ok(repository.findAll());
+        }else{
+            return ResponseEntity.notFound().build();
+        }
 	}
 }
