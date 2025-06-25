@@ -47,6 +47,11 @@ public class Participanteromeria implements Serializable {
 	public Participanteromeria() {
 	}
 
+	public Participanteromeria(Usuario usuario2, Year year2) {
+		this.usuario = usuario2;
+		this.year = year2;
+	}
+
 	public int getId() {
 		return this.id;
 	}
