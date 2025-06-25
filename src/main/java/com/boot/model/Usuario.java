@@ -33,6 +33,16 @@ public class Usuario implements Serializable {
 	public Usuario() {
 	}
 
+	public Usuario(String nombre, Date ultimaConexion, byte isAdmin) {
+		this.nombre = nombre;
+		this.ultimaConexion = ultimaConexion;
+		this.isAdmin = isAdmin;
+	}
+
+	public Usuario(String nombre) {
+		this.nombre = nombre;
+	}
+
 	public int getId() {
 		return this.id;
 	}
