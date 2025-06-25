@@ -36,6 +36,11 @@ public class Year implements Serializable {
 	public Year() {
 	}
 
+	public Year(String nombre, int year) {
+		this.nombre = nombre;
+		this.year = year;
+	}
+
 	public int getId() {
 		return this.id;
 	}
