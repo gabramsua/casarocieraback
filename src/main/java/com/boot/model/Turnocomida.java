@@ -4,11 +4,14 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 /**
  * The persistent class for the turnocomida database table.
  * 
  */
+@JsonIgnoreProperties({"participanteromeriacomidas", "hibernateLazyInitializer", "handler"})
 @Entity
 @NamedQuery(name="Turnocomida.findAll", query="SELECT t FROM Turnocomida t")
 public class Turnocomida implements Serializable {
@@ -22,7 +25,7 @@ public class Turnocomida implements Serializable {
 
 	private String nombre;
 
-	private int platoPrincipal;
+	private String platoPrincipal;
 
 	//bi-directional many-to-one association to Participanteromeriacomida
 	@OneToMany(mappedBy="turnocomida")
@@ -34,6 +37,11 @@ public class Turnocomida implements Serializable {
 	private Year year;
 
 	public Turnocomida() {
+	}
+	
+	public Turnocomida(String nombre, Year year) {
+		this.nombre = nombre;
+		this.year = year;
 	}
 
 	public int getId() {
@@ -60,11 +68,11 @@ public class Turnocomida implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public int getPlatoPrincipal() {
+	public String getPlatoPrincipal() {
 		return this.platoPrincipal;
 	}
 
-	public void setPlatoPrincipal(int platoPrincipal) {
+	public void setPlatoPrincipal(String platoPrincipal) {
 		this.platoPrincipal = platoPrincipal;
 	}
 
