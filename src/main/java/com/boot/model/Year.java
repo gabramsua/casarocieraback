@@ -1,8 +1,16 @@
 package com.boot.model;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 
 
 /**
@@ -10,6 +18,7 @@ import java.util.List;
  * 
  */
 @Entity
+@JsonIgnoreProperties({"balances", "participanteromerias", "turnocomidas", "hibernateLazyInitializer", "handler"})
 @NamedQuery(name="Year.findAll", query="SELECT y FROM Year y")
 public class Year implements Serializable {
 	private static final long serialVersionUID = 1L;

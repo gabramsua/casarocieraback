@@ -64,7 +64,7 @@ public class ParticipanteRomeriaController {
 	}
 
 //  @Operation(summary = "Actualiza todos los valores de un año")
-	@PutMapping(value="year", consumes=MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value="participanteromeria", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Participanteromeria item) {
 		Participanteromeria updated_item    = new Participanteromeria(item.getUsuario(), item.getYear());
 		
@@ -83,7 +83,7 @@ public class ParticipanteRomeriaController {
 	}
 	
 //  @Operation(summary = "Borrado físico de un año")
-	@DeleteMapping(value="year/{id}")
+	@DeleteMapping(value="participanteromeria/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id")int id) {
 		repository.delete(repository.findById(id).orElse(null));
 
