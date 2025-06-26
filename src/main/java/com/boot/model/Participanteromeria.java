@@ -4,12 +4,15 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 /**
  * The persistent class for the participanteromeria database table.
  * 
  */
 @Entity
+@JsonIgnoreProperties({"balances", "participanteromeriacomidas", "propuestas", "votopropuestas", "hibernateLazyInitializer", "handler"})
 @NamedQuery(name="Participanteromeria.findAll", query="SELECT p FROM Participanteromeria p")
 public class Participanteromeria implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -17,10 +20,6 @@ public class Participanteromeria implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-
-	//bi-directional many-to-one association to Balance
-	@OneToMany(mappedBy="participanteromeria")
-	private List<Balance> balances;
 
 	//bi-directional many-to-one association to Usuario
 	@ManyToOne
@@ -31,6 +30,10 @@ public class Participanteromeria implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="idYear")
 	private Year year;
+
+	//bi-directional many-to-one association to Balance
+	@OneToMany(mappedBy="participanteromeria")
+	private List<Balance> balances;
 
 	//bi-directional many-to-one association to Participanteromeriacomida
 	@OneToMany(mappedBy="participanteromeria")
