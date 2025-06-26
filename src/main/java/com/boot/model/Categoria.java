@@ -4,12 +4,15 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 /**
  * The persistent class for the categoria database table.
  * 
  */
 @Entity
+@JsonIgnoreProperties({"balances", "hibernateLazyInitializer", "handler"})
 @NamedQuery(name="Categoria.findAll", query="SELECT c FROM Categoria c")
 public class Categoria implements Serializable {
 	private static final long serialVersionUID = 1L;

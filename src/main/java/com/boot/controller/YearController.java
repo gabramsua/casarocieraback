@@ -37,8 +37,8 @@ public class YearController {
 	    if (item.isPresent()) {
 	        return ResponseEntity.ok(item.get());
 	    } else {
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-	                             .body("No se encontró el recurso con ID: " + id);
+			CustomError err = new CustomError(HttpStatus.NOT_FOUND, "No existe ningún año con esos datos.");
+            return ResponseEntity.badRequest().body(err);
 	    }
 	}
 	
@@ -56,17 +56,20 @@ public class YearController {
 		
 		//  Comprobaciones obligatorias
         if (created_item.getNombre() == null || created_item.getNombre().isEmpty() || created_item.getNombre().isBlank()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El campo 'nombre' es obligatorio");
+			CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "El campo 'nombre' es obligatorio");
+            return ResponseEntity.badRequest().body(err);
         }
         if (String.valueOf(created_item.getYear()) == null || String.valueOf(created_item.getYear()).isEmpty() || String.valueOf(created_item.getYear()).isBlank()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El campo 'year' es obligatorio");
+        	CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "El campo 'year' es obligatorio");
+            return ResponseEntity.badRequest().body(err);
         }
         
 
         //  Comprobaciones duplicidad
         duplicated_item = repository.findByNombre(created_item.getNombre());
         if (!ObjectUtils.isEmpty(duplicated_item)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El año indicado ya existe.");
+			CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "Ya existe un año con esos datos.");
+            return ResponseEntity.badRequest().body(err);
         }
         
         repository.save(item);
@@ -85,8 +88,6 @@ public class YearController {
             if (!ObjectUtils.isEmpty(updated_item)){
             	repository.save(item);
             	return ResponseEntity.ok(repository.findByNombre(item.getNombre()));
-            } else { // NO HIT
-                return ResponseEntity.notFound().build();
             }
 		} catch (NoSuchElementException e) {
 			CustomError err = new CustomError(HttpStatus.NOT_FOUND, "No existe ningún año con esos datos.");
@@ -95,29 +96,26 @@ public class YearController {
 			CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "Ya existe un año con esos datos.");
             return ResponseEntity.badRequest().body(err);
         }
+		return null;
 	}
 	
 //  @Operation(summary = "Borrado físico de un año")
 	@DeleteMapping(value="year/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id")int id) {
-//		repository.delete(repository.findById(id).orElse(null));
-
 		Year deleted_item = new Year();
 
 		try {
 	        // Buscamos la relación
 			deleted_item = repository.findById(id).get();
 	        if (!ObjectUtils.isEmpty(deleted_item)){
-	
 	            repository.deleteById(deleted_item.getId());
 	            
 	            return ResponseEntity.ok(repository.findAll());
-	        } else { // NO HIT
-	            return ResponseEntity.notFound().build();
 	        }
 		} catch (NoSuchElementException e) {
 			CustomError err = new CustomError(HttpStatus.NOT_FOUND, "No existe ningún año con esos datos.");
             return ResponseEntity.badRequest().body(err);
 		}
+		return null;
 	}
 }
