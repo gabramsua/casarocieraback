@@ -88,7 +88,7 @@ public class TurnoComidaController {
 	    }
 	}
 
-//  @Operation(summary = "Actualiza todos los valores de un año")
+//  @Operation(summary = "Actualiza todos los valores de un turno de comida")
 	@PutMapping(value="turnocomida", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Turnocomida item) {
 		Turnocomida updated_item = new Turnocomida(item.getNombre(), item.getYear());

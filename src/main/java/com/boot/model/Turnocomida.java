@@ -29,7 +29,7 @@ public class Turnocomida implements Serializable {
 
 	//bi-directional many-to-one association to Participanteromeriacomida
 	@OneToMany(mappedBy="turnocomida")
-	private List<Participanteromeriacomida> participanteromeriacomidas;
+	private List<Participantecomida> participanteromeriacomidas;
 
 	//bi-directional many-to-one association to Year
 	@ManyToOne
@@ -76,22 +76,22 @@ public class Turnocomida implements Serializable {
 		this.platoPrincipal = platoPrincipal;
 	}
 
-	public List<Participanteromeriacomida> getParticipanteromeriacomidas() {
+	public List<Participantecomida> getParticipanteromeriacomidas() {
 		return this.participanteromeriacomidas;
 	}
 
-	public void setParticipanteromeriacomidas(List<Participanteromeriacomida> participanteromeriacomidas) {
+	public void setParticipanteromeriacomidas(List<Participantecomida> participanteromeriacomidas) {
 		this.participanteromeriacomidas = participanteromeriacomidas;
 	}
 
-	public Participanteromeriacomida addParticipanteromeriacomida(Participanteromeriacomida participanteromeriacomida) {
+	public Participantecomida addParticipanteromeriacomida(Participantecomida participanteromeriacomida) {
 		getParticipanteromeriacomidas().add(participanteromeriacomida);
 		participanteromeriacomida.setTurnocomida(this);
 
 		return participanteromeriacomida;
 	}
 
-	public Participanteromeriacomida removeParticipanteromeriacomida(Participanteromeriacomida participanteromeriacomida) {
+	public Participantecomida removeParticipanteromeriacomida(Participantecomida participanteromeriacomida) {
 		getParticipanteromeriacomidas().remove(participanteromeriacomida);
 		participanteromeriacomida.setTurnocomida(null);
 

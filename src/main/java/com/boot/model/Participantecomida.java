@@ -1,6 +1,9 @@
 package com.boot.model;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 
@@ -9,8 +12,9 @@ import jakarta.persistence.*;
  * 
  */
 @Entity
-@NamedQuery(name="Participanteromeriacomida.findAll", query="SELECT p FROM Participanteromeriacomida p")
-public class Participanteromeriacomida implements Serializable {
+//@JsonIgnoreProperties({"participanteromeriacomidas", "hibernateLazyInitializer", "handler"})
+@NamedQuery(name="Participantecomida.findAll", query="SELECT p FROM Participantecomida p")
+public class Participantecomida implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -27,7 +31,12 @@ public class Participanteromeriacomida implements Serializable {
 	@JoinColumn(name="idTurnoComida")
 	private Turnocomida turnocomida;
 
-	public Participanteromeriacomida() {
+	public Participantecomida() {
+	}
+	
+	public Participantecomida(Participanteromeria p, Turnocomida t) {
+		this.participanteromeria = p;
+		this.turnocomida = t;
 	}
 
 	public int getId() {

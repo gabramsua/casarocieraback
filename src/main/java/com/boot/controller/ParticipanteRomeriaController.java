@@ -99,7 +99,7 @@ public class ParticipanteRomeriaController {
 	}
 	
 	// ESTE ENDPOINT NO DEBERÍA SER USADO
-
+/*
 //  @Operation(summary = "Actualiza todos los valores de un año")
 	@PutMapping(value="participanteromeria", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Participanteromeria item) {
@@ -137,7 +137,7 @@ public class ParticipanteRomeriaController {
             	/*
             	repository.save(item);
             	return ResponseEntity.ok(repository.findByUsuarioAndYear(item.getUsuario(), item.getYear()));
-            	*/
+            	*
             }
 		} catch (NoSuchElementException e) {
 			CustomError err = new CustomError(HttpStatus.NOT_FOUND, "No existe ningún Participanteromeria con esos datos.");
@@ -148,6 +148,8 @@ public class ParticipanteRomeriaController {
         }
 		return null;
 	}
+	*/
+
 	
 //  @Operation(summary = "Borrado físico de un año")
 	@DeleteMapping(value="participanteromeria/{id}")

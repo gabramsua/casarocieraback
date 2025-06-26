@@ -5,7 +5,7 @@
 		<class>com.boot.model.Categoria</class>
 		<class>com.boot.model.Habitacion</class>
 		<class>com.boot.model.Participanteromeria</class>
-		<class>com.boot.model.Participanteromeriacomida</class>
+		<class>com.boot.model.Participantecomida</class>
 		<class>com.boot.model.Propuesta</class>
 		<class>com.boot.model.Propuestaasignacion</class>
 		<class>com.boot.model.Turnocomida</class>
