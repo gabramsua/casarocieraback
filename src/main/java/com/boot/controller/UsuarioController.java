@@ -1,5 +1,8 @@
 package com.boot.controller;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.boot.model.Usuario;
 import com.boot.model.Year;
+import com.boot.pojo.CustomError;
 import com.boot.repository.UsuarioRepository;
 
 @RestController
@@ -26,7 +30,14 @@ public class UsuarioController {
 //    @Operation(summary = "Devuelve el detalle de un usuario")
 	@GetMapping(value="usuario/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getItem(@PathVariable("id") int id) {
-		return ResponseEntity.ok(repository.findById(id).orElse(null));
+		Optional<Usuario> item = repository.findById(id);
+
+	    if (item.isPresent()) {
+	        return ResponseEntity.ok(item.get());
+	    } else {
+			CustomError err = new CustomError(HttpStatus.NOT_FOUND, "No existe ningún usuario con esos datos.");
+	        return ResponseEntity.badRequest().body(err);
+	    }
 	}
 	
 //  @Operation(summary = "Devuelve el listado de usuarios")
@@ -36,20 +47,22 @@ public class UsuarioController {
 	}
 	
 //  @Operation(summary = "Añade un usuario")
-	@PostMapping(value="usuario", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.TEXT_PLAIN_VALUE)
+	@PostMapping(value="usuario", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> add(@RequestBody Usuario item) {
 		Usuario created_item    = new Usuario(item.getNombre(), item.getUltimaConexion(), item.getIsAdmin());
 		Usuario duplicated_item = new Usuario();
 		
 		//  Comprobaciones obligatorias
         if (created_item.getNombre() == null || created_item.getNombre().isEmpty() || created_item.getNombre().isBlank()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El campo 'nombre' es obligatorio");
+        	CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "El campo 'nombre' es obligatorio");
+            return ResponseEntity.badRequest().body(err);
         }        
 
         //  Comprobaciones duplicidad
         duplicated_item = repository.findByNombre(created_item.getNombre());
         if (!ObjectUtils.isEmpty(duplicated_item)){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario indicado ya existe.");
+        	CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "Ya existe un usuario con esos datos.");
+            return ResponseEntity.badRequest().body(err);
         }
         
         repository.save(item);
@@ -68,31 +81,34 @@ public class UsuarioController {
             if (!ObjectUtils.isEmpty(updated_item)){
             	repository.save(item);
             	return ResponseEntity.ok(repository.findByNombre(item.getNombre()));
-            } else {
-                return ResponseEntity.notFound().build();
             }
-		} catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+		} catch (NoSuchElementException e) {
+			CustomError err = new CustomError(HttpStatus.NOT_FOUND, "No existe ningún usuario con esos datos.");
+            return ResponseEntity.badRequest().body(err);
+		} catch (Exception e) {			
+			CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "Ya existe un usuario con esos datos.");
+            return ResponseEntity.badRequest().body(err);
         }
+		return null;
 	}
 	
 //  @Operation(summary = "Borrado físico de un Usuario")
 	@DeleteMapping(value="usuario/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id")int id) {
-		repository.delete(repository.findById(id).orElse(null));
-
 		Usuario deleted_item = new Usuario();
 
-
-        // Buscamos la relación
-		deleted_item = repository.findById(id).get();
-        if (!ObjectUtils.isEmpty(deleted_item)){
-
-            repository.deleteById(deleted_item.getId());
-            
-            return ResponseEntity.ok(repository.findAll());
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+		try {
+	        // Buscamos la relación
+			deleted_item = repository.findById(id).get();
+	        if (!ObjectUtils.isEmpty(deleted_item)){
+	            repository.deleteById(deleted_item.getId());
+	            
+	            return ResponseEntity.ok(repository.findAll());
+	        }
+		} catch (NoSuchElementException e) {
+			CustomError err = new CustomError(HttpStatus.NOT_FOUND, "No existe ningún usuario con esos datos.");
+            return ResponseEntity.badRequest().body(err);
+		}
+		return null;
 	}
 }
