@@ -5,12 +5,15 @@ import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 /**
  * The persistent class for the propuesta database table.
  * 
  */
 @Entity
+@JsonIgnoreProperties({"propuestaasignacions", "votopropuestas", "hibernateLazyInitializer", "handler"})
 @NamedQuery(name="Propuesta.findAll", query="SELECT p FROM Propuesta p")
 public class Propuesta implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -36,6 +39,12 @@ public class Propuesta implements Serializable {
 	private List<Votopropuesta> votopropuestas;
 
 	public Propuesta() {
+	}
+
+	public Propuesta(Date fecha, Participanteromeria participanteromeria) {
+		super();
+		this.fecha = fecha;
+		this.participanteromeria = participanteromeria;
 	}
 
 	public int getId() {
