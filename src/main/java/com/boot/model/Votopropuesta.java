@@ -32,6 +32,12 @@ public class Votopropuesta implements Serializable {
 	public Votopropuesta() {
 	}
 
+	public Votopropuesta(Participanteromeria participanteromeria, Propuesta propuesta) {
+		super();
+		this.participanteromeria = participanteromeria;
+		this.propuesta = propuesta;
+	}
+
 	public int getId() {
 		return this.id;
 	}
