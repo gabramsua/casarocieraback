@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 //import io.swagger.v3.oas.annotations.Operation;
 
+import com.boot.DTO.PropuestaCreacionDTO;
 import com.boot.model.Propuesta;
 import com.boot.pojo.CustomError;
 import com.boot.repository.PropuestaRepository;
+import com.boot.services.PropuestaService;
 
 
 
@@ -28,7 +30,10 @@ public class PropuestaController {
 
 	@Autowired
 	PropuestaRepository repository;
-
+	
+	@Autowired
+    PropuestaService propuestaService;
+	
 //    @Operation(summary = "Devuelve el detalle de un Propuesta")
 	@GetMapping(value="propuesta/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getItem(@PathVariable() int id) {
@@ -115,4 +120,20 @@ public class PropuestaController {
 		}
 		return null;
 	}
+	
+	
+	/////////////////////////////////////////////// 
+	///		RELLENAR LA PROPUESTA CREADA	   ///
+	/////////////////////////////////////////////// 
+	@PostMapping(value="rellenaPropuesta", consumes=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> crearPropuestaCompleta(@RequestBody PropuestaCreacionDTO propuestaCreacionDTO) {
+        try {
+            propuestaService.crearPropuestaConAsignaciones(propuestaCreacionDTO);
+            return ResponseEntity.ok(repository.findAll());
+//            return new ResponseEntity<>("Propuesta creada exitosamente.", HttpStatus.CREATED);
+        } catch (Exception e) {
+            // Manejo de errores más específico aquí (ej. PropuestaInvalidaException, CapacidadExcedidaException)
+            return new ResponseEntity<>("Error al crear la propuesta: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

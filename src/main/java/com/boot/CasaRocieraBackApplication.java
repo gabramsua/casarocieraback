@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {
-		"com.boot.controller", "com.boot.dao", "com.boot.service", "com.boot.repository", "com.boot.model", "com.boot.pojo"
+		"com.boot.controller", "com.boot.dao", "com.boot.services", "com.boot.repository", "com.boot.model", "com.boot.pojo"
 //		"com.boot"
 })
 public class CasaRocieraBackApplication {
