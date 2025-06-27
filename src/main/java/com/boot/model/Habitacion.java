@@ -4,12 +4,15 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 /**
  * The persistent class for the habitacion database table.
  * 
  */
 @Entity
+@JsonIgnoreProperties({"propuestaasignacions", "hibernateLazyInitializer", "handler"})
 @NamedQuery(name="Habitacion.findAll", query="SELECT h FROM Habitacion h")
 public class Habitacion implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -27,6 +30,12 @@ public class Habitacion implements Serializable {
 	private List<Propuestaasignacion> propuestaasignacions;
 
 	public Habitacion() {
+	}
+
+	public Habitacion(int capacidad, String nombre) {
+		super();
+		this.capacidad = capacidad;
+		this.nombre = nombre;
 	}
 
 	public int getId() {
