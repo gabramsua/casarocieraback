@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 //import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.boot.model.Participantecomida;
 import com.boot.model.Participanteromeria;
 import com.boot.model.Turnocomida;
-import com.boot.model.Year;
 import com.boot.pojo.CustomError;
 import com.boot.repository.ParticipanteComidaRepository;
 import com.boot.repository.ParticipanteRomeriaRepository;
@@ -40,7 +38,7 @@ public class ParticipanteComidaController {
 
 //    @Operation(summary = "Devuelve el detalle de un participantecomida")
 	@GetMapping(value="participantecomida/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getItem(@PathVariable("id") int id) {
+	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		Optional<Participantecomida> item = repository.findById(id);
 
 	    if (item.isPresent()) {
@@ -60,7 +58,7 @@ public class ParticipanteComidaController {
 //  @Operation(summary = "Añade un participantecomida")
 	@PostMapping(value="participantecomida", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> add(@RequestBody Participantecomida item) {
-		Participantecomida created_item    = new Participantecomida(item.getParticipanteromeria(), item.getTurnocomida());
+//		Participantecomida created_item    = new Participantecomida(item.getParticipanteromeria(), item.getTurnocomida());
 		Participantecomida duplicated_item = new Participantecomida();
 		
 		//  Comprobaciones obligatorias
@@ -131,7 +129,7 @@ public class ParticipanteComidaController {
 
 	//  @Operation(summary = "Borrado físico de un participantecomida")
 	@DeleteMapping(value="participantecomida/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id")int id) {
+	public ResponseEntity<?> delete(@PathVariable() int id) {
 		Participantecomida deleted_item = new Participantecomida();
 
 		try {

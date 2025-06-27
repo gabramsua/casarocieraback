@@ -31,7 +31,7 @@ public class YearController {
 
 //    @Operation(summary = "Devuelve el detalle de un año")
 	@GetMapping(value="year/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getItem(@PathVariable("id") int id) {
+	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		Optional<Year> item = repository.findById(id);
 
 	    if (item.isPresent()) {
@@ -101,7 +101,7 @@ public class YearController {
 	
 //  @Operation(summary = "Borrado físico de un año")
 	@DeleteMapping(value="year/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id")int id) {
+	public ResponseEntity<?> delete(@PathVariable() int id) {
 		Year deleted_item = new Year();
 
 		try {

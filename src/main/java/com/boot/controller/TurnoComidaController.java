@@ -35,7 +35,7 @@ public class TurnoComidaController {
 
 //    @Operation(summary = "Devuelve el detalle de un TurnoComida")
 	@GetMapping(value="turnocomida/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getItem(@PathVariable("id") int id) {
+	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		Optional<Turnocomida> item = repository.findById(id);
 
 	    if (item.isPresent()) {
@@ -116,7 +116,7 @@ public class TurnoComidaController {
 	
 //  @Operation(summary = "Borrado físico de un turnocomida")
 	@DeleteMapping(value="turnocomida/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id")int id) {
+	public ResponseEntity<?> delete(@PathVariable() int id) {
 		Turnocomida deleted_item = new Turnocomida();
 
 		try {

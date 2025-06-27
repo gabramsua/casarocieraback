@@ -28,7 +28,7 @@ public class CategoriaController {
 
 //    @Operation(summary = "Devuelve el detalle de una Categoría")
 	@GetMapping(value="categoria/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getItem(@PathVariable("id") int id) {
+	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		Optional<Categoria> item = repository.findById(id);
 
 	    if (item.isPresent()) {
@@ -92,7 +92,7 @@ public class CategoriaController {
 	
 //  @Operation(summary = "Borrado físico de una categoria")
 	@DeleteMapping(value="categoria/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id")int id) {
+	public ResponseEntity<?> delete(@PathVariable() int id) {
 		Categoria deleted_item = new Categoria();
 
 		try {

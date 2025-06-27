@@ -18,7 +18,7 @@ import jakarta.persistence.OneToMany;
  * 
  */
 @Entity
-@JsonIgnoreProperties({"balances", "participanteromerias", "turnocomidas", "hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({"participanteromerias", "turnocomidas", "hibernateLazyInitializer", "handler"})
 @NamedQuery(name="Year.findAll", query="SELECT y FROM Year y")
 public class Year implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -29,10 +29,6 @@ public class Year implements Serializable {
 
 	private int year;
 	private String nombre;
-
-	//bi-directional many-to-one association to Balance
-	@OneToMany(mappedBy="year")
-	private List<Balance> balances;
 
 	//bi-directional many-to-one association to Participanteromeria
 	@OneToMany(mappedBy="year")
@@ -72,28 +68,6 @@ public class Year implements Serializable {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	public List<Balance> getBalances() {
-		return this.balances;
-	}
-
-	public void setBalances(List<Balance> balances) {
-		this.balances = balances;
-	}
-
-	public Balance addBalance(Balance balance) {
-		getBalances().add(balance);
-		balance.setYear(this);
-
-		return balance;
-	}
-
-	public Balance removeBalance(Balance balance) {
-		getBalances().remove(balance);
-		balance.setYear(null);
-
-		return balance;
 	}
 
 	public List<Participanteromeria> getParticipanteromerias() {

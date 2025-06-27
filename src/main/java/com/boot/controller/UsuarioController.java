@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.boot.model.Usuario;
-import com.boot.model.Year;
 import com.boot.pojo.CustomError;
 import com.boot.repository.UsuarioRepository;
 
@@ -29,7 +28,7 @@ public class UsuarioController {
 
 //    @Operation(summary = "Devuelve el detalle de un usuario")
 	@GetMapping(value="usuario/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getItem(@PathVariable("id") int id) {
+	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		Optional<Usuario> item = repository.findById(id);
 
 	    if (item.isPresent()) {
@@ -94,7 +93,7 @@ public class UsuarioController {
 	
 //  @Operation(summary = "Borrado físico de un Usuario")
 	@DeleteMapping(value="usuario/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id")int id) {
+	public ResponseEntity<?> delete(@PathVariable() int id) {
 		Usuario deleted_item = new Usuario();
 
 		try {
