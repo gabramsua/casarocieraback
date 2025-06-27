@@ -39,13 +39,24 @@ public class Balance implements Serializable {
 	@JoinColumn(name="idParticipanteRomeria")
 	private Participanteromeria participanteromeria;
 
-	//bi-directional many-to-one association to Year
-	@ManyToOne
-	@JoinColumn(name="idYear")
-	private Year year;
-
 	public Balance() {
 	}
+	
+	
+
+	public Balance(String concepto, Date fecha, double importe, byte isIngreso, String urlTicket, Categoria categoria,
+			Participanteromeria participanteromeria) {
+		super();
+		this.concepto = concepto;
+		this.fecha = fecha;
+		this.importe = importe;
+		this.isIngreso = isIngreso;
+		this.urlTicket = urlTicket;
+		this.categoria = categoria;
+		this.participanteromeria = participanteromeria;
+	}
+
+
 
 	public int getId() {
 		return this.id;
@@ -109,14 +120,6 @@ public class Balance implements Serializable {
 
 	public void setParticipanteromeria(Participanteromeria participanteromeria) {
 		this.participanteromeria = participanteromeria;
-	}
-
-	public Year getYear() {
-		return this.year;
-	}
-
-	public void setYear(Year year) {
-		this.year = year;
 	}
 
 }
