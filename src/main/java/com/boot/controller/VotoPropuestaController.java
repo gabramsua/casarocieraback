@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.boot.model.Votopropuesta;
 import com.boot.pojo.CustomError;
-import com.boot.repository.PropuestaRepository;
 import com.boot.repository.VotoPropuestaRepository;
 
 
@@ -29,8 +28,6 @@ public class VotoPropuestaController {
 
 	@Autowired
 	VotoPropuestaRepository repository;
-	@Autowired
-	PropuestaRepository propuestaRepository;
 
 //    @Operation(summary = "Devuelve el detalle de un VotoPropuesta")
 	@GetMapping(value="votopropuesta/{id}", produces=MediaType.APPLICATION_JSON_VALUE)

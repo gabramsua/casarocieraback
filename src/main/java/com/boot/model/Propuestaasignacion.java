@@ -32,6 +32,13 @@ public class Propuestaasignacion implements Serializable {
 	public Propuestaasignacion() {
 	}
 
+	public Propuestaasignacion(String persona, Habitacion habitacion, Propuesta propuesta) {
+		super();
+		this.persona = persona;
+		this.habitacion = habitacion;
+		this.propuesta = propuesta;
+	}
+
 	public int getId() {
 		return this.id;
 	}
