@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ public class UsuarioController {
 	UsuarioRepository repository;
 
 //    @Operation(summary = "Devuelve el detalle de un usuario")
+    @CrossOrigin
 	@GetMapping(value="usuario/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		Optional<Usuario> item = repository.findById(id);
@@ -40,12 +42,14 @@ public class UsuarioController {
 	}
 	
 //  @Operation(summary = "Devuelve el listado de usuarios")
+    @CrossOrigin
 	@GetMapping(value="/usuarios", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(repository.findAll());
 	}
 	
 //  @Operation(summary = "Añade un usuario")
+    @CrossOrigin
 	@PostMapping(value="usuario", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> add(@RequestBody Usuario item) {
 		Usuario created_item    = new Usuario(item.getNombre(), item.getUltimaConexion(), item.getIsAdmin());
@@ -70,6 +74,7 @@ public class UsuarioController {
 	}
 
 //  @Operation(summary = "Actualiza todos los valores de un año")
+    @CrossOrigin
 	@PutMapping(value="usuario", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Usuario item) {
 		Usuario updated_item    = new Usuario(item.getNombre());
@@ -92,6 +97,7 @@ public class UsuarioController {
 	}
 	
 //  @Operation(summary = "Borrado físico de un Usuario")
+    @CrossOrigin
 	@DeleteMapping(value="usuario/{id}")
 	public ResponseEntity<?> delete(@PathVariable() int id) {
 		Usuario deleted_item = new Usuario();

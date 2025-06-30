@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +30,8 @@ public class Year implements Serializable {
 
 	private int year;
 	private String nombre;
+	@Column(name = "isActive") // o como se llame la columna
+	private boolean isActive;
 
 	//bi-directional many-to-one association to Participanteromeria
 	@OneToMany(mappedBy="year")
@@ -68,6 +71,14 @@ public class Year implements Serializable {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	public List<Participanteromeria> getParticipanteromerias() {

@@ -30,6 +30,8 @@ public class Participanteromeria implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="idYear")
 	private Year year;
+	@Column(name = "isLogged") // o como se llame la columna
+	private boolean isLogged;
 
 	//bi-directional many-to-one association to Balance
 	@OneToMany(mappedBy="participanteromeria")
@@ -101,6 +103,15 @@ public class Participanteromeria implements Serializable {
 		this.year = year;
 	}
 
+
+	public boolean isLogged() {
+		return isLogged;
+	}
+
+	public void setLogged(boolean isLogged) {
+		this.isLogged = isLogged;
+	}
+	
 	public List<Participantecomida> getParticipanteromeriacomidas() {
 		return this.participanteromeriacomidas;
 	}
