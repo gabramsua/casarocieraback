@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +35,8 @@ public class BalanceController {
 	ParticipanteRomeriaRepository participanteRepository;
 	@Autowired
 	CategoriaRepository categoriaRepository;
-	
+
+	@CrossOrigin
 	@GetMapping(value="balance/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		Optional<Balance> item = repository.findById(id);
@@ -46,12 +48,14 @@ public class BalanceController {
             return ResponseEntity.badRequest().body(err);
 	    }
 	}
-	
+
+	@CrossOrigin
 	@GetMapping(value="/balances", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAll() {
 		return ResponseEntity.ok(repository.findAll());
 	}
-	
+
+	@CrossOrigin
 	@PostMapping(value="balance", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> add(@RequestBody Balance item) {
 		
@@ -90,7 +94,8 @@ public class BalanceController {
 	        return ResponseEntity.badRequest().body(err);
 	    }
 	}
-	
+
+	@CrossOrigin
 	@PutMapping(value="balance", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Balance item) {
 		Balance updated_item    = new Balance(item.getConcepto(), item.getFecha(), item.getImporte(), item.getIsIngreso(), item.getUrlTicket(), item.getCategoria(), item.getParticipanteromeria());
@@ -118,7 +123,8 @@ public class BalanceController {
             return ResponseEntity.badRequest().body(err);
         }
 	}
-	
+
+	@CrossOrigin
 	@DeleteMapping(value="balance/{id}")
 	public ResponseEntity<?> delete(@PathVariable()int id) {
 		Balance deleted_item = new Balance();

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ public class CategoriaController {
 	CategoriaRepository repository;
 
 //    @Operation(summary = "Devuelve el detalle de una Categoría")
+	@CrossOrigin
 	@GetMapping(value="categoria/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		Optional<Categoria> item = repository.findById(id);
@@ -40,12 +42,14 @@ public class CategoriaController {
 	}
 	
 //  @Operation(summary = "Devuelve el listado de categorias")
+	@CrossOrigin
 	@GetMapping(value="/categorias", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(repository.findAll());
 	}
 	
 //  @Operation(summary = "Añade una categoria")
+	@CrossOrigin
 	@PostMapping(value="categoria", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> add(@RequestBody Categoria item) {
 		Categoria created_item    = new Categoria(item.getNombre());
@@ -69,6 +73,7 @@ public class CategoriaController {
 	}
 
 //  @Operation(summary = "Actualiza todos los valores de una categoría")
+	@CrossOrigin
 	@PutMapping(value="categoria", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Categoria item) {
 		Categoria updated_item    = new Categoria(item.getNombre());
@@ -91,6 +96,7 @@ public class CategoriaController {
 	}
 	
 //  @Operation(summary = "Borrado físico de una categoria")
+	@CrossOrigin
 	@DeleteMapping(value="categoria/{id}")
 	public ResponseEntity<?> delete(@PathVariable() int id) {
 		Categoria deleted_item = new Categoria();

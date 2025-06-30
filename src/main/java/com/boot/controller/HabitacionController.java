@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public class HabitacionController {
 	HabitacionRepository repository;
 
 //    @Operation(summary = "Devuelve el detalle de un Habitacion")
+	@CrossOrigin
 	@GetMapping(value="habitacion/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		Optional<Habitacion> item = repository.findById(id);
@@ -49,6 +51,7 @@ public class HabitacionController {
 	}
 	
 //  @Operation(summary = "Añade un Habitacion")
+	@CrossOrigin
 	@PostMapping(value="habitacion", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> add(@RequestBody Habitacion item) {
 		Habitacion duplicated_item = new Habitacion(item.getCapacidad(), item.getNombre());
@@ -77,6 +80,7 @@ public class HabitacionController {
 	}
 
 //  @Operation(summary = "Actualiza todos los valores de un Habitacion")
+	@CrossOrigin
 	@PutMapping(value="habitacion", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Habitacion item) {
 		Habitacion updated_item    = new Habitacion(item.getCapacidad(), item.getNombre());
@@ -99,6 +103,7 @@ public class HabitacionController {
 	}
 	
 //  @Operation(summary = "Borrado físico de un Habitacion")
+	@CrossOrigin
 	@DeleteMapping(value="habitacion/{id}")
 	public ResponseEntity<?> delete(@PathVariable() int id) {
 		Habitacion deleted_item = new Habitacion();

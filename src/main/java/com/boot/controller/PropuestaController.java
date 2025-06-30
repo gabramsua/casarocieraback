@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ public class PropuestaController {
     PropuestaService propuestaService;
 	
 //    @Operation(summary = "Devuelve el detalle de un Propuesta")
+	@CrossOrigin
 	@GetMapping(value="propuesta/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		Optional<Propuesta> item = repository.findById(id);
@@ -48,12 +50,14 @@ public class PropuestaController {
 	}
 	
 //  @Operation(summary = "Devuelve el listado de Propuestas")
+	@CrossOrigin
 	@GetMapping(value="/propuestas", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(repository.findAll());
 	}
 	
 //  @Operation(summary = "Añade una Propuesta")
+	@CrossOrigin
 	@PostMapping(value="propuesta", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> add(@RequestBody Propuesta item) {
 		Propuesta duplicated_item = new Propuesta(item.getFecha(), item.getParticipanteromeria());
@@ -81,6 +85,7 @@ public class PropuestaController {
 	}
 
 //  @Operation(summary = "Actualiza todos los valores de un año")
+	@CrossOrigin
 	@PutMapping(value="propuesta", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Propuesta item) {
 		Propuesta updated_item    = new Propuesta();
@@ -102,6 +107,7 @@ public class PropuestaController {
 	}
 	
 //  @Operation(summary = "Borrado físico de un año")
+	@CrossOrigin
 	@DeleteMapping(value="propuesta/{id}")
 	public ResponseEntity<?> delete(@PathVariable() int id) {
 		Propuesta deleted_item = new Propuesta();
@@ -125,6 +131,7 @@ public class PropuestaController {
 	/////////////////////////////////////////////// 
 	///		RELLENAR LA PROPUESTA CREADA	   ///
 	/////////////////////////////////////////////// 
+	@CrossOrigin
 	@PostMapping(value="rellenaPropuesta", consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> crearPropuestaCompleta(@RequestBody PropuestaCreacionDTO propuestaCreacionDTO) {
         try {

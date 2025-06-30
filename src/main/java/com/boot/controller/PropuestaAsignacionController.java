@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,7 @@ public class PropuestaAsignacionController {
 //	VotoPropuestaRepository repository;
 
 //    @Operation(summary = "Devuelve el detalle de una Asignacion propuesta")
+	@CrossOrigin
 	@GetMapping(value="propuestaAsignacion/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		Optional<Propuestaasignacion> item = repository.findById(id);
@@ -49,12 +51,14 @@ public class PropuestaAsignacionController {
 	}
 	
 //  @Operation(summary = "Devuelve el listado de Asignaciones Propuestas")
+	@CrossOrigin
 	@GetMapping(value="/propuestaAsignacions", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(repository.findAll());
 	}
 	
 //  @Operation(summary = "Añade una asignación propuesta")
+	@CrossOrigin
 	@PostMapping(value="propuestaAsignacion", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> add(@RequestBody Propuestaasignacion item) {
 		Propuestaasignacion duplicated_item = new Propuestaasignacion(item.getPersona(), item.getHabitacion(), item.getPropuesta());
@@ -105,6 +109,7 @@ public class PropuestaAsignacionController {
 	
 	// NO TIENE SENTIDO EN ESTE CONTEXTO
 //  @Operation(summary = "Actualiza todos los valores de un voto de propuesta")
+//	@CrossOrigin
 //	@PutMapping(value="propuestaAsignacion", consumes=MediaType.APPLICATION_JSON_VALUE)
 //	public ResponseEntity<?> update(@RequestBody Votopropuesta item) {
 //		Votopropuesta updated_item    = new Votopropuesta();
@@ -126,6 +131,7 @@ public class PropuestaAsignacionController {
 //	}
 	
 //  @Operation(summary = "Borrado físico de un registro de propuesta asignación")
+	@CrossOrigin
 	@DeleteMapping(value="propuestaAsignacion/{id}")
 	public ResponseEntity<?> delete(@PathVariable() int id) {
 		Propuestaasignacion deleted_item = new Propuestaasignacion();

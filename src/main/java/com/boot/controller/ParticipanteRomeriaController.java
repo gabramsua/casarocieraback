@@ -37,6 +37,7 @@ public class ParticipanteRomeriaController {
 	YearRepository yearRepository;
 
 //    @Operation(summary = "Devuelve el detalle de un participanteromeria")
+	@CrossOrigin
 	@GetMapping(value="participanteromeria/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		 Optional<Participanteromeria> item = repository.findById(id);
@@ -50,12 +51,14 @@ public class ParticipanteRomeriaController {
 	}
 	
 //  @Operation(summary = "Devuelve el listado de participanteromeria")
+	@CrossOrigin
 	@GetMapping(value="/participanteromerias", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(repository.findAll());
 	}
-	
+
 //  @Operation(summary = "Añade un participanteromeria")
+	@CrossOrigin
 	@PostMapping(value="participanteromeria", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> add(@RequestBody Participanteromeria item) {
 		Participanteromeria created_item    = new Participanteromeria(item.getUsuario(), item.getYear());
@@ -102,6 +105,7 @@ public class ParticipanteRomeriaController {
 	// ESTE ENDPOINT NO DEBERÍA SER USADO
 /*
 //  @Operation(summary = "Actualiza todos los valores de un año")
+	@CrossOrigin
 	@PutMapping(value="participanteromeria", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Participanteromeria item) {
 		Participanteromeria updated_item    = new Participanteromeria(item.getUsuario(), item.getYear());
@@ -153,6 +157,7 @@ public class ParticipanteRomeriaController {
 
 	
 //  @Operation(summary = "Borrado físico de un año")
+	@CrossOrigin
 	@DeleteMapping(value="participanteromeria/{id}")
 	public ResponseEntity<?> delete(@PathVariable() int id) {
 		Participanteromeria deleted_item = new Participanteromeria();

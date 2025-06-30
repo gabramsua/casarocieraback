@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public class TurnoComidaController {
 	YearRepository yearRepository;
 
 //    @Operation(summary = "Devuelve el detalle de un TurnoComida")
+	@CrossOrigin
 	@GetMapping(value="turnocomida/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		Optional<Turnocomida> item = repository.findById(id);
@@ -47,6 +49,7 @@ public class TurnoComidaController {
 	}
 	
 //  @Operation(summary = "Devuelve el listado de TurnoComidas")
+	@CrossOrigin
 	@GetMapping(value="/turnocomidas", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(repository.findAll());
@@ -89,6 +92,7 @@ public class TurnoComidaController {
 	}
 
 //  @Operation(summary = "Actualiza todos los valores de un turno de comida")
+	@CrossOrigin
 	@PutMapping(value="turnocomida", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Turnocomida item) {
 		Turnocomida updated_item = new Turnocomida(item.getNombre(), item.getYear());
@@ -115,6 +119,7 @@ public class TurnoComidaController {
 	}
 	
 //  @Operation(summary = "Borrado físico de un turnocomida")
+	@CrossOrigin
 	@DeleteMapping(value="turnocomida/{id}")
 	public ResponseEntity<?> delete(@PathVariable() int id) {
 		Turnocomida deleted_item = new Turnocomida();

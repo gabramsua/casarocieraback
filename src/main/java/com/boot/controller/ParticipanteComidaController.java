@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,7 @@ public class ParticipanteComidaController {
 	ParticipanteRomeriaRepository participanteRepository;
 
 //    @Operation(summary = "Devuelve el detalle de un participantecomida")
+	@CrossOrigin
 	@GetMapping(value="participantecomida/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		Optional<Participantecomida> item = repository.findById(id);
@@ -50,12 +52,14 @@ public class ParticipanteComidaController {
 	}
 	
 //  @Operation(summary = "Devuelve el listado de participantecomida")
+	@CrossOrigin
 	@GetMapping(value="/participantecomidas", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(repository.findAll());
 	}
 	
 //  @Operation(summary = "Añade un participantecomida")
+	@CrossOrigin
 	@PostMapping(value="participantecomida", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> add(@RequestBody Participantecomida item) {
 //		Participantecomida created_item    = new Participantecomida(item.getParticipanteromeria(), item.getTurnocomida());
@@ -100,6 +104,7 @@ public class ParticipanteComidaController {
 	// ESTE ENDPOINT NO DEBERÍA SER USADO
 /*
 //  @Operation(summary = "Actualiza todos los valores de un año")
+	@CrossOrigin
 	@PutMapping(value="participantecomida", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Turnocomida item) {
 		Turnocomida updated_item = new Turnocomida(item.getNombre(), item.getYear());
@@ -128,6 +133,7 @@ public class ParticipanteComidaController {
 
 
 	//  @Operation(summary = "Borrado físico de un participantecomida")
+	@CrossOrigin
 	@DeleteMapping(value="participantecomida/{id}")
 	public ResponseEntity<?> delete(@PathVariable() int id) {
 		Participantecomida deleted_item = new Participantecomida();

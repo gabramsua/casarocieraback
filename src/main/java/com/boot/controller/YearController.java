@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public class YearController {
 	YearRepository repository;
 
 //    @Operation(summary = "Devuelve el detalle de un año")
+	@CrossOrigin
 	@GetMapping(value="year/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getItem(@PathVariable() int id) {
 		Optional<Year> item = repository.findById(id);
@@ -43,12 +45,14 @@ public class YearController {
 	}
 	
 //  @Operation(summary = "Devuelve el listado de años")
+	@CrossOrigin
 	@GetMapping(value="/years", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(repository.findAll());
 	}
 	
 //  @Operation(summary = "Añade un año")
+	@CrossOrigin
 	@PostMapping(value="year", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> add(@RequestBody Year item) {
 		Year created_item    = new Year(item.getNombre(), item.getYear());
@@ -78,6 +82,7 @@ public class YearController {
 	}
 
 //  @Operation(summary = "Actualiza todos los valores de un año")
+	@CrossOrigin
 	@PutMapping(value="year", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Year item) {
 		Year updated_item    = new Year(item.getNombre(), item.getYear());
@@ -100,6 +105,7 @@ public class YearController {
 	}
 	
 //  @Operation(summary = "Borrado físico de un año")
+	@CrossOrigin
 	@DeleteMapping(value="year/{id}")
 	public ResponseEntity<?> delete(@PathVariable() int id) {
 		Year deleted_item = new Year();
