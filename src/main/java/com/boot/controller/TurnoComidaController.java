@@ -138,4 +138,16 @@ public class TurnoComidaController {
 		}
 		return null;
 	}
+	
+	///////////////////////////////////////////////////////////////////////
+	///
+	///						OTROS ENDPOINTS								///
+	///
+	///////////////////////////////////////////////////////////////////////
+	
+	@CrossOrigin
+	@GetMapping(value="/comidasEventoActivo", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getComidasEventoActivo() {
+        return ResponseEntity.ok(repository.findAllByYearIsActiveTrue());
+	}
 }
