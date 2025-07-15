@@ -120,4 +120,18 @@ public class VotoPropuestaController {
 		}
 		return null;
 	}
+	
+
+	
+	///////////////////////////////////////////////////////////////////////
+	///
+	///						OTROS ENDPOINTS								///
+	///
+	///////////////////////////////////////////////////////////////////////
+
+	@CrossOrigin
+	@GetMapping(value="/votopropuestasEventoActivo", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getAllEventoActivo() {
+        return ResponseEntity.ok(repository.findAllByActiveYear());
+	}
 }
