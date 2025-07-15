@@ -12,5 +12,6 @@ public interface PropuestaAsignacionRepository extends JpaRepository<Propuestaas
 	Propuestaasignacion findByPropuestaAndHabitacionAndPersona(Propuesta p, Habitacion h, String s);
 	Propuestaasignacion findByPropuestaAndPersona(Propuesta p, String s);
 	List<Propuestaasignacion> findAllByPropuestaAndHabitacion(Propuesta p, Habitacion h);
+	List<Propuestaasignacion> findByPropuestaId(Long propuestaId);
 
 }

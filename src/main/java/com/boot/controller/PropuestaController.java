@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 //import io.swagger.v3.oas.annotations.Operation;
 
+import com.boot.DTO.DetallePropuestaDTO;
 import com.boot.DTO.PropuestaCreacionDTO;
 import com.boot.model.Propuesta;
 import com.boot.pojo.CustomError;
@@ -143,4 +144,17 @@ public class PropuestaController {
             return new ResponseEntity<>("Error al crear la propuesta: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+	
+	@CrossOrigin
+	@GetMapping(value="/propuestasEventoActivo", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getAllEventoActivo() {
+        return ResponseEntity.ok(repository.findAllByActiveYear());
+	}
+
+	@CrossOrigin
+	@GetMapping("/propuesta/detalle-completo/{id}")
+	public ResponseEntity<DetallePropuestaDTO> getDetallePropuesta(@PathVariable Long id) {
+	    return ResponseEntity.ok(propuestaService.getDetallePropuesta(id));
+	}
+
 }
