@@ -124,4 +124,16 @@ public class YearController {
 		}
 		return null;
 	}
+	
+	///////////////////////////////////////////////////////////////////////
+	///
+	///						OTROS ENDPOINTS								///
+	///
+	///////////////////////////////////////////////////////////////////////
+
+	@CrossOrigin
+	@GetMapping(value="/eventoActivo", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getEventoActivos() {
+        return ResponseEntity.ok(repository.findByIsActiveTrue());
+	}
 }
