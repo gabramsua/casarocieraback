@@ -61,15 +61,14 @@ public class CategoriaController {
         }        
 
         //  Comprobaciones duplicidad
-        duplicated_item = repository.findByNombre(created_item.getNombre());
+        duplicated_item = repository.findByNombreAndCasa(created_item.getNombre(), item.getCasa());
         if (!ObjectUtils.isEmpty(duplicated_item)){
 			CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "Ya existe un año con esos datos.");
             return ResponseEntity.badRequest().body(err);
         }
         
-        repository.save(item);
         //	Recuperamos registro creado
-        return ResponseEntity.ok(repository.findByNombre(item.getNombre()));
+        return ResponseEntity.ok(repository.save(item));
 	}
 
 //  @Operation(summary = "Actualiza todos los valores de una categoría")
@@ -80,10 +79,9 @@ public class CategoriaController {
 		
 		try {
             // Buscar el registro por su ID en la base de datos
-			updated_item = repository.findById(item.getId()).get();
+			updated_item = repository.findByNombreAndCasa(item.getNombre(), item.getCasa());
             if (!ObjectUtils.isEmpty(updated_item)){
-            	repository.save(item);
-            	return ResponseEntity.ok(repository.findByNombre(item.getNombre()));
+            	return ResponseEntity.ok(repository.save(item));
             }
 		} catch (NoSuchElementException e) {
 			CustomError err = new CustomError(HttpStatus.NOT_FOUND, "No existe ninguna categoría con esos datos.");
@@ -92,7 +90,7 @@ public class CategoriaController {
 			CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "Ya existe una categoría con esos datos.");
             return ResponseEntity.badRequest().body(err);
         }
-		return null;
+		return ResponseEntity.ok(repository.save(item));
 	}
 	
 //  @Operation(summary = "Borrado físico de una categoria")

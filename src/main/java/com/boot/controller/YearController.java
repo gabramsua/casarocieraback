@@ -70,15 +70,14 @@ public class YearController {
         
 
         //  Comprobaciones duplicidad
-        duplicated_item = repository.findByNombre(created_item.getNombre());
+        duplicated_item = repository.findByNombreAndCasa(created_item.getNombre(), item.getCasa());
         if (!ObjectUtils.isEmpty(duplicated_item)){
-			CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "Ya existe un año con esos datos.");
+			CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "Ya existe un año con esos datos en esa casa.");
             return ResponseEntity.badRequest().body(err);
         }
         
-        repository.save(item);
         //	Recuperamos registro creado
-        return ResponseEntity.ok(repository.findByNombre(item.getNombre()));	
+        return ResponseEntity.ok(repository.save(item));	
 	}
 
 //  @Operation(summary = "Actualiza todos los valores de un año")
@@ -91,8 +90,8 @@ public class YearController {
             // Buscar el registro por su ID en la base de datos
 			updated_item = repository.findById(item.getId()).get();
             if (!ObjectUtils.isEmpty(updated_item)){
-            	repository.save(item);
-            	return ResponseEntity.ok(repository.findByNombre(item.getNombre()));
+//            	repository.save(item);
+            	return ResponseEntity.ok(repository.save(item));
             }
 		} catch (NoSuchElementException e) {
 			CustomError err = new CustomError(HttpStatus.NOT_FOUND, "No existe ningún año con esos datos.");

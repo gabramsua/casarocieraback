@@ -33,6 +33,11 @@ public class Usuario implements Serializable {
 	@OneToMany(mappedBy="usuario")
 	private List<Participanteromeria> participanteromerias;
 
+	// bi-directional many-to-one association to Casa
+	@ManyToOne
+	@JoinColumn(name="idCasa") // El nombre de la columna FK en la DB
+	private Casa casa; // Nombre del campo en la entidad Java
+	
 	public Usuario() {
 	}
 
@@ -98,6 +103,14 @@ public class Usuario implements Serializable {
 		participanteromeria.setUsuario(null);
 
 		return participanteromeria;
+	}
+
+	public Casa getCasa() {
+		return casa;
+	}
+
+	public void setCasa(Casa casa) {
+		this.casa = casa;
 	}
 
 }
