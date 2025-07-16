@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.boot.model.Balance;
 import com.boot.model.Categoria;
 import com.boot.model.Participanteromeria;
-import com.boot.model.Year;
 import com.boot.pojo.CustomError;
 import com.boot.repository.BalanceRepository;
 import com.boot.repository.CategoriaRepository;
@@ -141,5 +140,18 @@ public class BalanceController {
             return ResponseEntity.badRequest().body(err);
 		}
 		return null;
+	}
+
+	
+	///////////////////////////////////////////////////////////////////////
+	///
+	///						OTROS ENDPOINTS								///
+	///
+	///////////////////////////////////////////////////////////////////////
+
+	@CrossOrigin
+	@GetMapping(value="/ultimosGastos", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getUltimosGastos() {
+		return ResponseEntity.ok(repository.findTop10ByIsIngresoFalseAndParticipanteromeria_Year_IsActiveTrueOrderByFechaDesc());
 	}
 }

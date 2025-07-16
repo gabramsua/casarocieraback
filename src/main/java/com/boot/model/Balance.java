@@ -39,6 +39,12 @@ public class Balance implements Serializable {
 	@JoinColumn(name="idParticipanteRomeria")
 	private Participanteromeria participanteromeria;
 
+	// bi-directional many-to-one association to Casa
+	@ManyToOne
+	@JoinColumn(name="idCasa") // El nombre de la columna FK en la DB
+	private Casa casa; // Nombre del campo en la entidad Java
+
+
 	public Balance() {
 	}
 	
@@ -120,6 +126,14 @@ public class Balance implements Serializable {
 
 	public void setParticipanteromeria(Participanteromeria participanteromeria) {
 		this.participanteromeria = participanteromeria;
+	}
+
+	public Casa getCasa() {
+		return casa;
+	}
+
+	public void setCasa(Casa casa) {
+		this.casa = casa;
 	}
 
 }

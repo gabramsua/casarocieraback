@@ -45,6 +45,7 @@ public class HabitacionController {
 	}
 	
 //  @Operation(summary = "Devuelve el listado de Habitacions")
+	@CrossOrigin
 	@GetMapping(value="/habitacions", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(repository.findAll());

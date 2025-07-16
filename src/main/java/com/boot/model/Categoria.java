@@ -26,6 +26,12 @@ public class Categoria implements Serializable {
 	//bi-directional many-to-one association to Balance
 	@OneToMany(mappedBy="categoria")
 	private List<Balance> balances;
+	
+	// bi-directional many-to-one association to Casa
+	@ManyToOne
+	@JoinColumn(name="idCasa") // El nombre de la columna FK en la DB
+	private Casa casa; // Nombre del campo en la entidad Java
+	
 
 	public Categoria() {
 	}
@@ -70,6 +76,14 @@ public class Categoria implements Serializable {
 		balance.setCategoria(null);
 
 		return balance;
+	}
+
+	public Casa getCasa() {
+		return casa;
+	}
+
+	public void setCasa(Casa casa) {
+		this.casa = casa;
 	}
 
 }
