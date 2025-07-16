@@ -32,7 +32,7 @@ public class Year implements Serializable {
 
 	private int year;
 	private String nombre;
-	@Column(name = "isActive") // o como se llame la columna
+	@Column(name = "isActive")
 	private boolean isActive;
 
 	//bi-directional many-to-one association to Participanteromeria

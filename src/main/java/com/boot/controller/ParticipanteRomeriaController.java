@@ -184,9 +184,9 @@ public class ParticipanteRomeriaController {
 	///////////////////////////////////////////////////////////////////////
 
 	@CrossOrigin
-	@GetMapping(value="/participantesActivos", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getUsuariosActivos() {
-        return ResponseEntity.ok(repository.findAllByYearActive());
+	@GetMapping(value="/participantesActivos/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getUsuariosActivos(@PathVariable() int id) {
+        return ResponseEntity.ok(repository.findActiveParticipantsByCasaId(id));
 	}
 	
 }
