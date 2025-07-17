@@ -123,4 +123,17 @@ public class HabitacionController {
 		}
 		return null;
 	}
+	
+	///////////////////////////////////////////////////////////////////////
+	///
+	///						OTROS ENDPOINTS								///
+	///
+	///////////////////////////////////////////////////////////////////////
+
+	
+	@CrossOrigin
+	@GetMapping(value="/habitacions/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getAllByCasa(@PathVariable() int id) {
+        return ResponseEntity.ok(repository.findAllByCasaId(id));
+	}
 }

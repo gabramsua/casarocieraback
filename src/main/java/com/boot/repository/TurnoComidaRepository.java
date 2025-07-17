@@ -11,6 +11,7 @@ import com.boot.model.Year;
 public interface TurnoComidaRepository extends JpaRepository<Turnocomida, Integer>{
 
 	Turnocomida findByNombreAndYear(String nombre, Year year);
-//	@Query("SELECT c FROM TurnoComida c JOIN c.year y WHERE y.isActive = true")
+
     List<Turnocomida> findAllByYearIsActiveTrue();
+    List<Turnocomida> findAllByYearIsActiveTrueAndYearCasaId(int id);
 }

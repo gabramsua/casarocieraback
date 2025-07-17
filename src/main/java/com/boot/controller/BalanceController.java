@@ -150,8 +150,8 @@ public class BalanceController {
 	///////////////////////////////////////////////////////////////////////
 
 	@CrossOrigin
-	@GetMapping(value="/ultimosGastos", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getUltimosGastos() {
-		return ResponseEntity.ok(repository.findTop10ByIsIngresoFalseAndParticipanteromeria_Year_IsActiveTrueOrderByFechaDesc());
+	@GetMapping(value="/ultimosGastos/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getUltimosGastos(@PathVariable() int id) {
+		return ResponseEntity.ok(repository.findTop10ByIsIngresoFalseAndCasaIdAndParticipanteromeria_Year_IsActiveTrueOrderByFechaDesc(id));
 	}
 }

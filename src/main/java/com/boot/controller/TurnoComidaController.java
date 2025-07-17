@@ -146,8 +146,8 @@ public class TurnoComidaController {
 	///////////////////////////////////////////////////////////////////////
 	
 	@CrossOrigin
-	@GetMapping(value="/comidasEventoActivo", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getComidasEventoActivo() {
-        return ResponseEntity.ok(repository.findAllByYearIsActiveTrue());
+	@GetMapping(value="/comidasEventoActivo/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getComidasEventoActivo(@PathVariable() int id) {
+        return ResponseEntity.ok(repository.findAllByYearIsActiveTrueAndYearCasaId(id));
 	}
 }

@@ -131,8 +131,9 @@ public class YearController {
 	///////////////////////////////////////////////////////////////////////
 
 	@CrossOrigin
-	@GetMapping(value="/eventoActivo", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getEventoActivos() {
-        return ResponseEntity.ok(repository.findByIsActiveTrue());
+	@GetMapping(value="/eventoActivo/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getEventoActivos(@PathVariable() int id) {
+        return ResponseEntity.ok(repository.findByIsActiveTrueAndCasaIdWithCasaNombre(id));
+//        return ResponseEntity.ok(repository.findByIsActiveTrueAndCasaId(id));
 	}
 }

@@ -16,7 +16,7 @@ public interface BalanceRepository extends JpaRepository<Balance, Integer>{
      *
      * @return Una lista de los últimos 10 objetos Balance que cumplen los criterios.
      */
-    List<Balance> findTop10ByIsIngresoFalseAndParticipanteromeria_Year_IsActiveTrueOrderByFechaDesc();
+    List<Balance> findTop10ByIsIngresoFalseAndCasaIdAndParticipanteromeria_Year_IsActiveTrueOrderByFechaDesc(int id);
 
 
 }

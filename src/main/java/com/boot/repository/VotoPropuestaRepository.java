@@ -13,8 +13,8 @@ import com.boot.model.Votopropuesta;
 public interface VotoPropuestaRepository extends JpaRepository<Votopropuesta, Integer>{
 	
 	Votopropuesta findByParticipanteromeriaAndPropuesta(Participanteromeria participante, Propuesta propuesta);
-    @Query("SELECT p FROM Votopropuesta p WHERE p.participanteromeria.year.isActive = true")
-    List<Votopropuesta> findAllByActiveYear();
+    @Query("SELECT p FROM Votopropuesta p WHERE p.participanteromeria.year.isActive = true AND p.participanteromeria.year.casa.id = :idcasa")
+    List<Votopropuesta> findAllByActiveYearDeCasa(int idcasa);
 	  
     @Query("""
 			    SELECT p.participanteromeria.usuario.nombre 

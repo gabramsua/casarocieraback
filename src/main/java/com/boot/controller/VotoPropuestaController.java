@@ -130,8 +130,8 @@ public class VotoPropuestaController {
 	///////////////////////////////////////////////////////////////////////
 
 	@CrossOrigin
-	@GetMapping(value="/votopropuestasEventoActivo", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getAllEventoActivo() {
-        return ResponseEntity.ok(repository.findAllByActiveYear());
+	@GetMapping(value="/votopropuestasEventoActivo/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getAllEventoActivo(@PathVariable() int id) {
+        return ResponseEntity.ok(repository.findAllByActiveYearDeCasa(id));
 	}
 }
