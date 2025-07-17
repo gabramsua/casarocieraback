@@ -1,5 +1,6 @@
 package com.boot.controller;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -18,8 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 //import io.swagger.v3.oas.annotations.Operation;
 
+import com.boot.DTO.PropuestasListDTO;
+import com.boot.DTO.VotarPropuestaRequestDTO;
 import com.boot.model.Votopropuesta;
 import com.boot.pojo.CustomError;
+import com.boot.repository.ParticipanteRomeriaRepository;
+import com.boot.repository.PropuestaRepository;
 import com.boot.repository.VotoPropuestaRepository;
 
 
@@ -29,6 +34,10 @@ public class VotoPropuestaController {
 
 	@Autowired
 	VotoPropuestaRepository repository;
+	@Autowired
+    ParticipanteRomeriaRepository participanteromeriaRepository;
+	@Autowired
+    PropuestaRepository propuestaRepository;
 
 //    @Operation(summary = "Devuelve el detalle de un VotoPropuesta")
 	@CrossOrigin
@@ -54,9 +63,7 @@ public class VotoPropuestaController {
 //  @Operation(summary = "Añade un Voto de propuesta")
 	@CrossOrigin
 	@PostMapping(value="votopropuesta", consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> add(@RequestBody Votopropuesta item) {
-		Votopropuesta duplicated_item = new Votopropuesta(item.getParticipanteromeria(), item.getPropuesta());
-		
+	public ResponseEntity<?> add(@RequestBody Votopropuesta item) {		
 		//  Comprobaciones obligatorias
         if (item.getPropuesta() == null || String.valueOf(item.getPropuesta()).isEmpty() || String.valueOf(item.getPropuesta()).isBlank()) {
 			CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "El campo 'propuesta' es obligatorio");
@@ -67,15 +74,21 @@ public class VotoPropuestaController {
             return ResponseEntity.badRequest().body(err);
         }
         
-        //  Comprobaciones duplicidad
-        duplicated_item = repository.findByParticipanteromeriaAndPropuesta(item.getParticipanteromeria(), item.getPropuesta());
-        if (!ObjectUtils.isEmpty(duplicated_item)){
-			CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "Este usuario ya votó esta propuesta");
-            return ResponseEntity.badRequest().body(err);
-        }
+        //  Comprobaciones duplicidad => TONTERÍA EN ESTE CASO
+//        duplicated_item = repository.findByParticipanteromeriaAndPropuesta(item.getParticipanteromeria(), item.getPropuesta());
+//        if (!ObjectUtils.isEmpty(duplicated_item)){
+//			CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "Este usuario ya votó esta propuesta");
+//            return ResponseEntity.badRequest().body(err);
+//        }
         
+
+	    Votopropuesta voto = new Votopropuesta();
+	    voto.setIsAFavor((byte) (item.getIsAFavor()));
+		voto.setParticipanteromeria(participanteromeriaRepository.findById(item.getParticipanteromeria().getId()).orElseThrow());
+		voto.setPropuesta(propuestaRepository.findById(item.getPropuesta().getId()).orElseThrow());
+	    
         //	Recuperamos registro creado
-        return ResponseEntity.ok(repository.save(item));	
+        return ResponseEntity.ok(repository.save(voto));	
 	}
 
 //  @Operation(summary = "Actualiza todos los valores de un voto de propuesta")
@@ -132,6 +145,26 @@ public class VotoPropuestaController {
 	@CrossOrigin
 	@GetMapping(value="/votopropuestasEventoActivo/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAllEventoActivo(@PathVariable() int id) {
-        return ResponseEntity.ok(repository.findAllByActiveYearDeCasa(id));
+//        return ResponseEntity.ok(repository.findAllByActiveYearDeCasa(id));
+//        List<Votopropuesta> propuestasConVotos = repository.findAllByActiveYearDeCasa(id);
+//        List<Propuesta> propuestasSinVotos = repository.findProposalsWithoutVotesByActiveYearAndCasaId(id);
+//
+//        ListadoPropuestasConYSinVotos res = new ListadoPropuestasConYSinVotos(propuestasConVotos, propuestasSinVotos);
+		List<PropuestasListDTO> resumenVotos = repository.findPropuestasWithVoteSummaryByActiveYearAndCasaId(id);
+        return ResponseEntity.ok(resumenVotos);
+//        return ResponseEntity.ok(res);
+	}
+
+	@CrossOrigin
+	@PostMapping("/votar")
+	public ResponseEntity<?> votar(@RequestBody VotarPropuestaRequestDTO dto) {
+	    Votopropuesta voto = new Votopropuesta();
+	    voto.setIsAFavor((byte) (dto.isIsAFavor() ? 1 : 0));
+	    voto.setParticipanteromeria(participanteromeriaRepository.findById(dto.getIdParticipanteromeria()).orElseThrow());
+	    voto.setPropuesta(propuestaRepository.findById(dto.getIdPropuesta()).orElseThrow());
+
+	    repository.save(voto);
+
+	    return ResponseEntity.ok().build();
 	}
 }
