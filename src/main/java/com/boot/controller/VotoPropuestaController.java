@@ -1,5 +1,6 @@
 package com.boot.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -145,14 +146,21 @@ public class VotoPropuestaController {
 	@CrossOrigin
 	@GetMapping(value="/votopropuestasEventoActivo/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAllEventoActivo(@PathVariable() int id) {
-//        return ResponseEntity.ok(repository.findAllByActiveYearDeCasa(id));
-//        List<Votopropuesta> propuestasConVotos = repository.findAllByActiveYearDeCasa(id);
-//        List<Propuesta> propuestasSinVotos = repository.findProposalsWithoutVotesByActiveYearAndCasaId(id);
-//
-//        ListadoPropuestasConYSinVotos res = new ListadoPropuestasConYSinVotos(propuestasConVotos, propuestasSinVotos);
-		List<PropuestasListDTO> resumenVotos = repository.findPropuestasWithVoteSummaryByActiveYearAndCasaId(id);
-        return ResponseEntity.ok(resumenVotos);
-//        return ResponseEntity.ok(res);
+//		List<PropuestasListDTO> resumenVotos = repository.findPropuestasWithVoteSummaryByActiveYearAndCasaId(id);
+//        return ResponseEntity.ok(resumenVotos);
+		
+
+        List<PropuestasListDTO> basicPropuestas = repository.findBasicPropuestasByActiveYearAndCasaId(id);
+
+        for (PropuestasListDTO propuestaDTO : basicPropuestas) {
+            List<String> votantesAFavor = repository.findVotersNamesAFavorByPropuestaId(propuestaDTO.getId());
+            propuestaDTO.setVotosAFavor(votantesAFavor != null ? votantesAFavor : new ArrayList<>()); // << CAMBIO AQUÍ
+
+            List<String> votantesEnContra = repository.findVotersNamesEnContraByPropuestaId(propuestaDTO.getId());
+            propuestaDTO.setVotosEnContra(votantesEnContra != null ? votantesEnContra : new ArrayList<>()); // << CAMBIO AQUÍ
+        }
+
+        return ResponseEntity.ok(basicPropuestas);
 	}
 
 	@CrossOrigin
