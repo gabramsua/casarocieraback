@@ -31,11 +31,11 @@ public class Propuesta implements Serializable {
 	private Participanteromeria participanteromeria;
 
 	//bi-directional many-to-one association to Propuestaasignacion
-	@OneToMany(mappedBy="propuesta")
+	@OneToMany(mappedBy="propuesta", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Propuestaasignacion> propuestaasignacions;
 
 	//bi-directional many-to-one association to Votopropuesta
-	@OneToMany(mappedBy="propuesta")
+	@OneToMany(mappedBy="propuesta", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Votopropuesta> votopropuestas;
 
 	public Propuesta() {

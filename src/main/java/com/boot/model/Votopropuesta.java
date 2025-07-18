@@ -21,12 +21,12 @@ public class Votopropuesta implements Serializable {
 
 	//bi-directional many-to-one association to Participanteromeria
 	@ManyToOne
-	@JoinColumn(name="idParticipanteRomeria")
+	@JoinColumn(name="idParticipanteRomeria", nullable = false)
 	private Participanteromeria participanteromeria;
 
 	//bi-directional many-to-one association to Propuesta
 	@ManyToOne
-	@JoinColumn(name="idPropuesta")
+	@JoinColumn(name="idPropuesta", nullable = false)
 	private Propuesta propuesta;
 
 	public Votopropuesta() {
