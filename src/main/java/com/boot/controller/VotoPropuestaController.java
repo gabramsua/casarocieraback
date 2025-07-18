@@ -146,10 +146,6 @@ public class VotoPropuestaController {
 	@CrossOrigin
 	@GetMapping(value="/votopropuestasEventoActivo/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAllEventoActivo(@PathVariable() int id) {
-//		List<PropuestasListDTO> resumenVotos = repository.findPropuestasWithVoteSummaryByActiveYearAndCasaId(id);
-//        return ResponseEntity.ok(resumenVotos);
-		
-
         List<PropuestasListDTO> basicPropuestas = repository.findBasicPropuestasByActiveYearAndCasaId(id);
 
         for (PropuestasListDTO propuestaDTO : basicPropuestas) {
@@ -166,13 +162,24 @@ public class VotoPropuestaController {
 	@CrossOrigin
 	@PostMapping("/votar")
 	public ResponseEntity<?> votar(@RequestBody VotarPropuestaRequestDTO dto) {
-	    Votopropuesta voto = new Votopropuesta();
+	    // Buscar si ya existe un voto para esa propuesta y ese participante
+	    Optional<Votopropuesta> votoExistenteOpt = repository.findByPropuestaIdAndParticipanteromeriaId(
+	        dto.getIdPropuesta(),
+	        dto.getIdParticipanteromeria()
+	    );
+	
+	    Votopropuesta voto = votoExistenteOpt.orElseGet(Votopropuesta::new);
+	
 	    voto.setIsAFavor((byte) (dto.isIsAFavor() ? 1 : 0));
-	    voto.setParticipanteromeria(participanteromeriaRepository.findById(dto.getIdParticipanteromeria()).orElseThrow());
-	    voto.setPropuesta(propuestaRepository.findById(dto.getIdPropuesta()).orElseThrow());
-
+	    voto.setParticipanteromeria(
+	        participanteromeriaRepository.findById(dto.getIdParticipanteromeria()).orElseThrow()
+	    );
+	    voto.setPropuesta(
+	        propuestaRepository.findById(dto.getIdPropuesta()).orElseThrow()
+	    );
+	
 	    repository.save(voto);
-
+	
 	    return ResponseEntity.ok().build();
 	}
 }
