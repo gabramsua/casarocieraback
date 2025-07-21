@@ -1,6 +1,7 @@
 package com.boot.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -34,6 +35,9 @@ public class Year implements Serializable {
 	private String nombre;
 	@Column(name = "isActive")
 	private boolean isActive;
+	@Column(name = "precio") // El nombre de la columna en la BD
+	private BigDecimal precio; // Usamos BigDecimal para mapear DECIMAL(10,2)
+
 
 	//bi-directional many-to-one association to Participanteromeria
 	@OneToMany(mappedBy="year")
@@ -49,9 +53,12 @@ public class Year implements Serializable {
 	private Casa casa; // Nombre del campo en la entidad Java
 	
 	public Year() {
+		// Inicializa el nuevo campo a 0.00 por defecto
+		this.precio = BigDecimal.ZERO;
 	}
 
 	public Year(String nombre, int year) {
+		this();
 		this.nombre = nombre;
 		this.year = year;
 	}
@@ -138,6 +145,13 @@ public class Year implements Serializable {
 
 	public void setCasa(Casa casa) {
 		this.casa = casa;
+	}
+	public BigDecimal getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(BigDecimal precio) {
+		this.precio = precio;
 	}
 
 }

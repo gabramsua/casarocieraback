@@ -1,10 +1,21 @@
 package com.boot.model;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 
 
 /**
@@ -12,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * 
  */
 @Entity
-@JsonIgnoreProperties({"balances", "participanteromeriacomidas", "propuestas", "votopropuestas", "hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({"balances", "participanteromeriacomidas", "propuestas", "votopropuestas", "aportacionesParticipante", "hibernateLazyInitializer", "handler"})
 @NamedQuery(name="Participanteromeria.findAll", query="SELECT p FROM Participanteromeria p")
 public class Participanteromeria implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -32,6 +43,13 @@ public class Participanteromeria implements Serializable {
 	private Year year;
 	@Column(name = "isLogged") // o como se llame la columna
 	private boolean isLogged;
+	
+	@Column(name = "costo") // El nombre de la columna en la BD si es diferente al nombre del campo
+	private BigDecimal costo; // Usamos BigDecimal para mapear DECIMAL(10,2)
+
+	@Column(name = "totalAportado") // El nombre de la columna en la BD si es diferente al nombre del campo
+	private BigDecimal totalAportado; // Usamos BigDecimal para mapear DECIMAL(10,2)
+
 
 	//bi-directional many-to-one association to Balance
 	@OneToMany(mappedBy="participanteromeria")
@@ -48,11 +66,19 @@ public class Participanteromeria implements Serializable {
 	//bi-directional many-to-one association to Votopropuesta
 	@OneToMany(mappedBy="participanteromeria")
 	private List<Votopropuesta> votopropuestas;
+	
+	@OneToMany(mappedBy="participanteRomeria", cascade = CascadeType.ALL, orphanRemoval = true) // 'cascade' y 'orphanRemoval' si quieres gestionar la vida de las aportaciones desde aquí
+	private List<Aportacionparticipante> aportacionesParticipante; // Nombre del campo en la entidad Java (plural)
+
 
 	public Participanteromeria() {
+		// Inicializa los nuevos campos a 0.00 por defecto para evitar NullPointerExceptions
+		this.costo = BigDecimal.ZERO;
+		this.totalAportado = BigDecimal.ZERO;
 	}
 
 	public Participanteromeria(Usuario usuario2, Year year2) {
+		this(); // Llama al constructor por defecto para inicializar los BigDecimal
 		this.usuario = usuario2;
 		this.year = year2;
 	}
@@ -176,6 +202,40 @@ public class Participanteromeria implements Serializable {
 		votopropuesta.setParticipanteromeria(null);
 
 		return votopropuesta;
+	}
+	public BigDecimal getCosto() {
+		return costo;
+	}
+
+	public void setCosto(BigDecimal costo) {
+		this.costo = costo;
+	}
+
+	public BigDecimal getTotalAportado() {
+		return totalAportado;
+	}
+
+	public void setTotalAportado(BigDecimal totalAportado) {
+		this.totalAportado = totalAportado;
+	}
+	public List<Aportacionparticipante> getAportacionesParticipante() {
+		return this.aportacionesParticipante;
+	}
+
+	public void setAportacionesParticipante(List<Aportacionparticipante> aportacionesParticipante) {
+		this.aportacionesParticipante = aportacionesParticipante;
+	}
+
+	public Aportacionparticipante addAportacionesParticipante(Aportacionparticipante aportacionParticipante) {
+		getAportacionesParticipante().add(aportacionParticipante);
+		aportacionParticipante.setParticipanteRomeria(this); // Asegúrate que el campo de la FK en AportacionParticipante se llama 'participanteRomeria'
+		return aportacionParticipante;
+	}
+
+	public Aportacionparticipante removeAportacionesParticipante(Aportacionparticipante aportacionParticipante) {
+		getAportacionesParticipante().remove(aportacionParticipante);
+		aportacionParticipante.setParticipanteRomeria(null);
+		return aportacionParticipante;
 	}
 
 }
