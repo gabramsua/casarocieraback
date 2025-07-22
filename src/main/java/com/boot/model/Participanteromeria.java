@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,7 +24,7 @@ import jakarta.persistence.OneToMany;
  * 
  */
 @Entity
-@JsonIgnoreProperties({"balances", "participanteromeriacomidas", "propuestas", "votopropuestas", "aportacionesParticipante", "hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({/*"balances", "participanteromeriacomidas", "propuestas", "votopropuestas", "aportacionesParticipante", */"hibernateLazyInitializer", "handler"})
 @NamedQuery(name="Participanteromeria.findAll", query="SELECT p FROM Participanteromeria p")
 public class Participanteromeria implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -53,6 +54,7 @@ public class Participanteromeria implements Serializable {
 
 	//bi-directional many-to-one association to Balance
 	@OneToMany(mappedBy="participanteromeria")
+	@JsonManagedReference("participanteRomeria-balances") // <-- CLAVE: Referencia con nombre único
 	private List<Balance> balances;
 
 	//bi-directional many-to-one association to Participanteromeriacomida

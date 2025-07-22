@@ -1,8 +1,19 @@
 package com.boot.model;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 
 /**
@@ -37,12 +48,13 @@ public class Balance implements Serializable {
 	//bi-directional many-to-one association to Participanteromeria
 	@ManyToOne
 	@JoinColumn(name="idParticipanteRomeria")
+	@JsonBackReference("participanteRomeria-balances")
 	private Participanteromeria participanteromeria;
 
-	// bi-directional many-to-one association to Casa
+	// bi-directional many-to-one association to Year
 	@ManyToOne
-	@JoinColumn(name="idCasa") // El nombre de la columna FK en la DB
-	private Casa casa; // Nombre del campo en la entidad Java
+	@JoinColumn(name="idYear") // El nombre de la columna FK en la DB
+	private Year year; // Nombre del campo en la entidad Java
 
 
 	public Balance() {
@@ -51,7 +63,7 @@ public class Balance implements Serializable {
 	
 
 	public Balance(String concepto, Date fecha, double importe, byte isIngreso, String urlTicket, Categoria categoria,
-			Participanteromeria participanteromeria) {
+			Participanteromeria participanteromeria, Year year) {
 		super();
 		this.concepto = concepto;
 		this.fecha = fecha;
@@ -60,6 +72,7 @@ public class Balance implements Serializable {
 		this.urlTicket = urlTicket;
 		this.categoria = categoria;
 		this.participanteromeria = participanteromeria;
+		this.year = year;
 	}
 
 
@@ -128,12 +141,12 @@ public class Balance implements Serializable {
 		this.participanteromeria = participanteromeria;
 	}
 
-	public Casa getCasa() {
-		return casa;
+	public Year getYear() {
+		return year;
 	}
 
-	public void setCasa(Casa casa) {
-		this.casa = casa;
+	public void setYear(Year year) {
+		this.year = year;
 	}
 
 }

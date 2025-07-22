@@ -61,7 +61,7 @@ public class PropuestaController {
 	@CrossOrigin
 	@PostMapping(value="propuesta", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> add(@RequestBody Propuesta item) {
-		Propuesta duplicated_item = new Propuesta(item.getFecha(), item.getParticipanteromeria());
+//		Propuesta duplicated_item = new Propuesta(item.getFecha(), item.getParticipanteromeria());
 		
 		//  Comprobaciones obligatorias
         if (item.getFecha() == null || String.valueOf(item.getFecha()).isEmpty() || String.valueOf(item.getFecha()).isBlank()) {

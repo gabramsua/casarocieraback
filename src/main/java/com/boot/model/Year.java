@@ -22,7 +22,7 @@ import jakarta.persistence.OneToMany;
  * 
  */
 @Entity
-@JsonIgnoreProperties({"participanteromerias", "turnocomidas", "hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({"balances", "participanteromerias", "turnocomidas", "hibernateLazyInitializer", "handler"})
 @NamedQuery(name="Year.findAll", query="SELECT y FROM Year y")
 public class Year implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -51,6 +51,10 @@ public class Year implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="idCasa") // El nombre de la columna FK en la DB
 	private Casa casa; // Nombre del campo en la entidad Java
+
+    // bi-directional many-to-one association to Balance
+    @OneToMany(mappedBy="year")
+    private List<Balance> balances;
 	
 	public Year() {
 		// Inicializa el nuevo campo a 0.00 por defecto
@@ -152,6 +156,14 @@ public class Year implements Serializable {
 
 	public void setPrecio(BigDecimal precio) {
 		this.precio = precio;
+	}
+
+	public List<Balance> getBalances() {
+		return balances;
+	}
+
+	public void setBalances(List<Balance> balances) {
+		this.balances = balances;
 	}
 
 }

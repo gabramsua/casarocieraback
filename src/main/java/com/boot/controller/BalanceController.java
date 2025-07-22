@@ -1,5 +1,9 @@
 package com.boot.controller;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -20,10 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.boot.model.Balance;
 import com.boot.model.Categoria;
 import com.boot.model.Participanteromeria;
+import com.boot.model.Year;
 import com.boot.pojo.CustomError;
 import com.boot.repository.BalanceRepository;
 import com.boot.repository.CategoriaRepository;
 import com.boot.repository.ParticipanteRomeriaRepository;
+import com.boot.repository.YearRepository;
 
 @RestController
 public class BalanceController {
@@ -34,6 +40,8 @@ public class BalanceController {
 	ParticipanteRomeriaRepository participanteRepository;
 	@Autowired
 	CategoriaRepository categoriaRepository;
+    @Autowired
+    private YearRepository yearRepository;
 
 	@CrossOrigin
 	@GetMapping(value="balance/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -83,7 +91,7 @@ public class BalanceController {
 //		        }
 		        
 		        //	Recuperamos registro creado
-		        return ResponseEntity.ok(repository.save(new Balance(item.getConcepto(), item.getFecha(), item.getImporte(), item.getIsIngreso(), item.getUrlTicket(), categoria.get(), participante.get() )));
+		        return ResponseEntity.ok(repository.save(new Balance(item.getConcepto(), item.getFecha(), item.getImporte(), item.getIsIngreso(), item.getUrlTicket(), categoria.get(), participante.get(), item.getYear() )));
     		} else {
     			CustomError err = new CustomError(HttpStatus.NOT_FOUND, "No existe ningún participanteromeria con esos datos.");
     	        return ResponseEntity.badRequest().body(err);
@@ -97,7 +105,7 @@ public class BalanceController {
 	@CrossOrigin
 	@PutMapping(value="balance", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Balance item) {
-		Balance updated_item    = new Balance(item.getConcepto(), item.getFecha(), item.getImporte(), item.getIsIngreso(), item.getUrlTicket(), item.getCategoria(), item.getParticipanteromeria());
+		Balance updated_item    = new Balance(item.getConcepto(), item.getFecha(), item.getImporte(), item.getIsIngreso(), item.getUrlTicket(), item.getCategoria(), item.getParticipanteromeria(), item.getYear());
 
         // Buscar el registro por su ID en la base de datos
 		updated_item = repository.findById(item.getId()).get();
@@ -152,6 +160,54 @@ public class BalanceController {
 	@CrossOrigin
 	@GetMapping(value="/ultimosGastos/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getUltimosGastos(@PathVariable() int id) {
-		return ResponseEntity.ok(repository.findTop10ByIsIngresoFalseAndCasaIdAndParticipanteromeria_Year_IsActiveTrueOrderByFechaDesc(id));
+		return ResponseEntity.ok(repository.findTop10ByIsIngresoFalseAndYear_Casa_IdAndYear_IsActiveTrueOrderByFechaDesc(id));
+	}
+	
+	@CrossOrigin
+	@GetMapping(value="/balanceDeEvento/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getAllByEvento(@PathVariable() int id) {
+		 Optional<Year> yearOpt = yearRepository.findById(id);
+
+	        if (yearOpt.isEmpty()) {
+	            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Año no encontrado
+	        }
+
+	        Year year = yearOpt.get();
+
+	        List<Balance> balances = repository.findByYear(year);
+
+	        // Opcional: Si quieres asegurarte aún más de que solo se traen
+	        // balances de la casa a la que pertenece este Year.
+	        // List<Balance> balances = balanceRepository.findByYearAndCasa(year, year.getCasa());
+	        // (Esto requeriría un método findByYearAndCasa(Year year, Casa casa) en BalanceRepository,
+	        // y que Balance aún tuviera la relación directa con Casa, o un Year_Casa_Id)
+	        // **SIN EMBARGO, LA RELACIÓN DIRECTA BALANCE->YEAR YA ES SUFICIENTE PORQUE EL YEAR YA ESTÁ ASOCIADO A SU CASA.**
+
+	        // Calcular el total de ingresos y gastos
+	        BigDecimal totalIngresos = BigDecimal.ZERO;
+	        BigDecimal totalGastos = BigDecimal.ZERO;
+
+	        for (Balance balance : balances) {
+	            if (balance.getIsIngreso() == 1) {
+	                totalIngresos = totalIngresos.add(BigDecimal.valueOf(balance.getImporte()));
+	            } else {
+	                totalGastos = totalGastos.add(BigDecimal.valueOf(balance.getImporte()));
+	            }
+	        }
+
+	        BigDecimal balanceNeto = totalIngresos.subtract(totalGastos);
+
+	        // Crear un mapa para la respuesta, incluyendo los totales y la lista detallada
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("year", year);
+	        if (year.getCasa() != null) {
+	            response.put("casa", year.getCasa());
+	        }
+	        response.put("totalIngresos", totalIngresos);
+	        response.put("totalGastos", totalGastos);
+	        response.put("balanceNeto", balanceNeto);
+	        response.put("detalles", balances); // La lista completa de balances para ese año
+
+	        return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

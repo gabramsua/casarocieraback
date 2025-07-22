@@ -44,9 +44,6 @@ public class Casa implements Serializable {
     @OneToMany(mappedBy="casa")
     private List<Habitacion> habitaciones;
 
-    // bi-directional many-to-one association to Balance
-    @OneToMany(mappedBy="casa")
-    private List<Balance> balances;
 
     // --- Constructores, Getters y Setters ---
     public Casa() {
@@ -110,11 +107,4 @@ public class Casa implements Serializable {
 		this.habitaciones = habitaciones;
 	}
 
-	public List<Balance> getBalances() {
-		return balances;
-	}
-
-	public void setBalances(List<Balance> balances) {
-		this.balances = balances;
-	}
 }

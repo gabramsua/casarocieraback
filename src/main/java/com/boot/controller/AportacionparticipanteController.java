@@ -1,7 +1,6 @@
 package com.boot.controller;
 
 import java.math.BigDecimal;
-import java.util.Date; // Asegúrate de importar Date
 import java.util.List;
 import java.util.Optional;
 
@@ -121,7 +120,7 @@ public class AportacionparticipanteController {
                 conceptoBalance += " (" + savedAportacion.getConcepto() + ")";
             }
             balanceEntry.setConcepto(conceptoBalance);
-            balanceEntry.setCasa(participante.getYear().getCasa()); // Asocia a la casa del año/participante
+            balanceEntry.setYear(participante.getYear()); // Asocia a la casa del año/participante
 
             balanceRepository.save(balanceEntry);
 
