@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.boot.DTO.BalanceDeEventoDTO;
 import com.boot.model.Balance;
 import com.boot.model.Categoria;
 import com.boot.model.Participanteromeria;
@@ -167,21 +169,17 @@ public class BalanceController {
 	@GetMapping(value="/balanceDeEvento/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAllByEvento(@PathVariable() int id) {
 		 Optional<Year> yearOpt = yearRepository.findById(id);
-
 	        if (yearOpt.isEmpty()) {
 	            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Año no encontrado
 	        }
-
 	        Year year = yearOpt.get();
-
 	        List<Balance> balances = repository.findByYear(year);
 
-	        // Opcional: Si quieres asegurarte aún más de que solo se traen
-	        // balances de la casa a la que pertenece este Year.
-	        // List<Balance> balances = balanceRepository.findByYearAndCasa(year, year.getCasa());
-	        // (Esto requeriría un método findByYearAndCasa(Year year, Casa casa) en BalanceRepository,
-	        // y que Balance aún tuviera la relación directa con Casa, o un Year_Casa_Id)
-	        // **SIN EMBARGO, LA RELACIÓN DIRECTA BALANCE->YEAR YA ES SUFICIENTE PORQUE EL YEAR YA ESTÁ ASOCIADO A SU CASA.**
+	     // *** CAMBIO CLAVE AQUÍ: Mapear a BalanceDto ***
+	        List<BalanceDeEventoDTO> balanceDtos = balances.stream()
+	                                            .map(BalanceDeEventoDTO::new) // Usa el constructor del DTO
+	                                            .collect(Collectors.toList());
+
 
 	        // Calcular el total de ingresos y gastos
 	        BigDecimal totalIngresos = BigDecimal.ZERO;
@@ -206,7 +204,7 @@ public class BalanceController {
 	        response.put("totalIngresos", totalIngresos);
 	        response.put("totalGastos", totalGastos);
 	        response.put("balanceNeto", balanceNeto);
-	        response.put("detalles", balances); // La lista completa de balances para ese año
+	        response.put("detalles", balanceDtos); // La lista completa de balances para ese año
 
 	        return new ResponseEntity<>(response, HttpStatus.OK);
 	}
