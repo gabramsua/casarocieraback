@@ -1,5 +1,0 @@
-[build]
-builder = "MAVEN"
-
-[env]
-JAVA_VERSION = "21"
