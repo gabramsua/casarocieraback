@@ -71,11 +71,11 @@ public class AportacionparticipanteController {
 
     // --- 3. Crear una nueva aportación ---
     @CrossOrigin
-    @PostMapping(value="aportacion", consumes=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createAportacion(@RequestBody Aportacionparticipante aportacion) {
+    @PostMapping(value="aportacion/{id}", consumes=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createAportacion(@RequestBody Aportacionparticipante aportacion, @PathVariable() Integer id) {
 
         // 1. Validar que el ParticipanteRomeria existe
-        Optional<Participanteromeria> participanteOpt = participanteromeriaRepository.findById(aportacion.getParticipanteRomeria().getId());
+        Optional<Participanteromeria> participanteOpt = participanteromeriaRepository.findById(id);
         if (participanteOpt.isEmpty()) {
 			CustomError err = new CustomError(HttpStatus.BAD_REQUEST, "ParticipanteRomeria no válido.");
             return ResponseEntity.badRequest().body(err); // ParticipanteRomeria no válido
