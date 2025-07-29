@@ -26,8 +26,6 @@ public class Casa implements Serializable {
 
     private String nombre;
 
-    private boolean modTurnosComida;
-
 	// bi-directional many-to-one association to Usuario
     @OneToMany(mappedBy="casa")
     private List<Usuario> usuarios;
@@ -65,14 +63,6 @@ public class Casa implements Serializable {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	public boolean isModTurnosComida() {
-		return modTurnosComida;
-	}
-
-	public void setModTurnosComida(boolean modTurnosComida) {
-		this.modTurnosComida = modTurnosComida;
 	}
 
 	public List<Usuario> getUsuarios() {
