@@ -56,6 +56,14 @@ public class Balance implements Serializable {
 	@JoinColumn(name="idYear") // El nombre de la columna FK en la DB
 	private Year year; // Nombre del campo en la entidad Java
 
+	// bi-directional many-to-one association to Casa
+	@ManyToOne
+	@JoinColumn(name="idCasa") // <-- La columna de la clave foránea en la tabla 'balance'
+	@JsonBackReference("casa-balances") // <-- ¡Añade esto! para manejar la serialización JSON
+	private Casa casa; // <-- ¡Añade esto! El campo que representa la relación con la entidad Casa
+
+
+
 
 	public Balance() {
 	}
@@ -63,7 +71,7 @@ public class Balance implements Serializable {
 	
 
 	public Balance(String concepto, Date fecha, double importe, byte isIngreso, String urlTicket, Categoria categoria,
-			Participanteromeria participanteromeria, Year year) {
+			Participanteromeria participanteromeria, Year year, Casa casa) {
 		super();
 		this.concepto = concepto;
 		this.fecha = fecha;
@@ -73,9 +81,8 @@ public class Balance implements Serializable {
 		this.categoria = categoria;
 		this.participanteromeria = participanteromeria;
 		this.year = year;
+		this.casa= casa;
 	}
-
-
 
 	public int getId() {
 		return this.id;
@@ -149,4 +156,11 @@ public class Balance implements Serializable {
 		this.year = year;
 	}
 
+	public Casa getCasa() {
+		return casa;
+	}
+
+	public void setCasa(Casa casa) {
+		this.casa = casa;
+	}
 }

@@ -93,7 +93,7 @@ public class BalanceController {
 //		        }
 		        
 		        //	Recuperamos registro creado
-		        return ResponseEntity.ok(repository.save(new Balance(item.getConcepto(), item.getFecha(), item.getImporte(), item.getIsIngreso(), item.getUrlTicket(), categoria.get(), participante.get(), item.getYear() )));
+		        return ResponseEntity.ok(repository.save(new Balance(item.getConcepto(), item.getFecha(), item.getImporte(), item.getIsIngreso(), item.getUrlTicket(), categoria.get(), participante.get(), item.getYear(), item.getCasa() )));
     		} else {
     			CustomError err = new CustomError(HttpStatus.NOT_FOUND, "No existe ningún participanteromeria con esos datos.");
     	        return ResponseEntity.badRequest().body(err);
@@ -107,7 +107,7 @@ public class BalanceController {
 	@CrossOrigin
 	@PutMapping(value="balance", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Balance item) {
-		Balance updated_item    = new Balance(item.getConcepto(), item.getFecha(), item.getImporte(), item.getIsIngreso(), item.getUrlTicket(), item.getCategoria(), item.getParticipanteromeria(), item.getYear());
+		Balance updated_item    = new Balance(item.getConcepto(), item.getFecha(), item.getImporte(), item.getIsIngreso(), item.getUrlTicket(), item.getCategoria(), item.getParticipanteromeria(), item.getYear(), item.getCasa());
 
         // Buscar el registro por su ID en la base de datos
 		updated_item = repository.findById(item.getId()).get();

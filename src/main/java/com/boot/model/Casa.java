@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,8 +43,13 @@ public class Casa implements Serializable {
     @OneToMany(mappedBy="casa")
     private List<Habitacion> habitaciones;
 
+ // bi-directional many-to-one association to Balance
+    @OneToMany(mappedBy="casa") // "casa" es el nombre del campo en la entidad Balance que mapea esta relación
+    @JsonManagedReference("casa-balances") // <-- ¡Añade esto! para manejar la serialización JSON
+    private List<Balance> balances; // <-- ¡Añade esto!
 
-    // --- Constructores, Getters y Setters ---
+
+	// --- Constructores, Getters y Setters ---
     public Casa() {
     }
     
@@ -95,6 +101,14 @@ public class Casa implements Serializable {
 
 	public void setHabitaciones(List<Habitacion> habitaciones) {
 		this.habitaciones = habitaciones;
+	}
+
+    public List<Balance> getBalances() {
+		return balances;
+	}
+
+	public void setBalances(List<Balance> balances) {
+		this.balances = balances;
 	}
 
 }
