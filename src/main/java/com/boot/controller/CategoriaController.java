@@ -113,4 +113,16 @@ public class CategoriaController {
 		}
 		return null;
 	}
+	///////////////////////////////////////////////////////////////////////
+	///
+	///						OTROS ENDPOINTS								///
+	///
+	///////////////////////////////////////////////////////////////////////
+
+	
+	@CrossOrigin
+	@GetMapping(value="/categorias/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getAllByCasa(@PathVariable() int id) {
+        return ResponseEntity.ok(repository.findAllByCasaId(id));
+	}
 }
