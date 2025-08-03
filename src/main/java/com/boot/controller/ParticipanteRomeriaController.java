@@ -1,7 +1,9 @@
 package com.boot.controller;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 //import io.swagger.v3.oas.annotations.Operation;
 
+import com.boot.DTO.ParticipanteRomeriaActivoDTO;
 import com.boot.model.Participanteromeria;
 import com.boot.model.Usuario;
 import com.boot.model.Year;
@@ -185,7 +188,17 @@ public class ParticipanteRomeriaController {
 	@CrossOrigin
 	@GetMapping(value="/participantesActivos/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getUsuariosActivos(@PathVariable() int id) {
-        return ResponseEntity.ok(repository.findActiveParticipantsByCasaId(id));
+//        return ResponseEntity.ok(repository.findActiveParticipantsByCasaId(id));
+        List<Participanteromeria> participantes = repository.findActiveParticipantsByCasaId(id);
+
+        // 2. Mapear cada entidad ParticipanteRomeria a su DTO correspondiente
+        List<ParticipanteRomeriaActivoDTO> dtos = participantes.stream()
+            .map(participante -> {
+                return new ParticipanteRomeriaActivoDTO(participante);
+            })
+            .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
 	}
 	
 }

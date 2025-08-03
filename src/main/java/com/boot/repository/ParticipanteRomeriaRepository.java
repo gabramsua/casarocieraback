@@ -17,9 +17,14 @@ public interface ParticipanteRomeriaRepository extends JpaRepository<Participant
 	@Query("SELECT p FROM Participanteromeria p WHERE p.year.isActive = true")
 	List<Participanteromeria> findAllByYearActive();
 	
-	@Query("SELECT pr FROM Participanteromeria pr JOIN pr.year y JOIN pr.usuario u WHERE y.isActive = true AND u.casa.id = :idCasa AND u.casa.id = y.casa.id")
-    List<Participanteromeria> findActiveParticipantsByCasaId(@Param("idCasa") int idCasa);
+//	@Query("SELECT pr FROM Participanteromeria pr JOIN pr.year y JOIN pr.usuario u WHERE y.isActive = true AND u.casa.id = :idCasa AND u.casa.id = y.casa.id")
+//    List<Participanteromeria> findActiveParticipantsByCasaId(@Param("idCasa") int idCasa);
 
+	@Query("SELECT pr FROM Participanteromeria pr " +
+	           "LEFT JOIN FETCH pr.usuario u " + // Carga el usuario
+	           "LEFT JOIN FETCH pr.year y " + // Carga el año
+	           "WHERE pr.year.isActive = true AND pr.usuario.casa.id = :casaId") // Ajusta la condición de activo y casa
+    List<Participanteromeria> findActiveParticipantsByCasaId(@Param("casaId") int casaId);
 	
 
     List<Participanteromeria> findAllByYearIsActiveTrueAndYearCasaId(int idCasa);

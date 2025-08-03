@@ -13,7 +13,17 @@ public class ParticipanteRomeriaSimpleDTO {
     private BigDecimal costo;
     private BigDecimal totalAportado;
 
-    // Constructor que toma la entidad Participanteromeria y la mapea
+    public ParticipanteRomeriaSimpleDTO(int id, Usuario usuario, boolean isLogged, BigDecimal costo,
+			BigDecimal totalAportado) {
+		super();
+		this.id = id;
+		this.usuario = usuario;
+		this.isLogged = isLogged;
+		this.costo = costo;
+		this.totalAportado = totalAportado;
+	}
+
+	// Constructor que toma la entidad Participanteromeria y la mapea
     public ParticipanteRomeriaSimpleDTO(Participanteromeria participante) {
         this.id = participante.getId();
         this.usuario = participante.getUsuario(); // O mapea solo usuario.getId(), usuario.getNombre()
