@@ -1,7 +1,10 @@
 package com.boot.controller;
 
+import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 //import io.swagger.v3.oas.annotations.Operation;
 
+import com.boot.DTO.ComidaConParticipantesDTO;
+import com.boot.DTO.UsuarioDTO;
 import com.boot.model.Participantecomida;
 import com.boot.model.Participanteromeria;
 import com.boot.model.Turnocomida;
@@ -151,5 +156,37 @@ public class ParticipanteComidaController {
             return ResponseEntity.badRequest().body(err);
 		}
 		return null;
+	}
+	///////////////////////////////////////////////////////////////////////
+	///
+	///						OTROS ENDPOINTS								///
+	///
+	///////////////////////////////////////////////////////////////////////
+	
+	@CrossOrigin
+	@GetMapping(value = "/participantesComidasDeEventoActivo/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ComidaConParticipantesDTO>> getComidasParticipantesEventoActivo(@PathVariable() int id) {
+
+	    List<Participantecomida> todasLasAsignaciones = repository.findAllByParticipanteromeriaYearIsActiveTrueAndParticipanteromeriaYearCasaId(id);
+
+	    Map<Turnocomida, List<Participantecomida>> asignacionesPorTurno = todasLasAsignaciones.stream()
+	            .collect(Collectors.groupingBy(Participantecomida::getTurnocomida));
+
+	    List<ComidaConParticipantesDTO> listaDeComidas = asignacionesPorTurno.entrySet().stream()
+	            .map(entry -> {
+	                List<Participantecomida> asignacionesDelTurno = entry.getValue();
+
+	                Participantecomida primeraAsignacion = asignacionesDelTurno.get(0);
+
+	                // Mapeamos de Participantecomida -> Participanteromeria -> ParticipanteDto
+	                List<UsuarioDTO> participantesDto = asignacionesDelTurno.stream()
+	                        .map(asignacion -> new UsuarioDTO(asignacion.getParticipanteromeria().getUsuario()))
+	                        .collect(Collectors.toList());
+
+	                return new ComidaConParticipantesDTO(primeraAsignacion, participantesDto);
+	            })
+	            .collect(Collectors.toList());
+
+	    return ResponseEntity.ok(listaDeComidas);
 	}
 }
